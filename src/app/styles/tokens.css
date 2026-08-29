@@ -1,0 +1,47 @@
+/**
+ * Runtime MF design-token contract — consumer side.
+ * Shell owns paint when embedded; values bridge from shadcn semantic tokens
+ * so standalone preview and embedded remotes stay aligned.
+ *
+ * Theme switches: html[data-rmf-theme] + class "dark" (shadcn).
+ */
+
+html[data-rmf-theme='light'],
+html:not(.dark) {
+  --rmf-color-page: var(--background);
+  --rmf-color-surface: var(--card);
+  --rmf-color-fg: var(--foreground);
+  --rmf-color-muted: var(--muted-foreground);
+  --rmf-color-subtle: var(--muted-foreground);
+  --rmf-color-border: var(--border);
+  --rmf-radius-md: var(--radius);
+  --rmf-shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+}
+
+html[data-rmf-theme='dark'],
+html.dark {
+  --rmf-color-page: var(--background);
+  --rmf-color-surface: var(--card);
+  --rmf-color-fg: var(--foreground);
+  --rmf-color-muted: var(--muted-foreground);
+  --rmf-color-subtle: var(--muted-foreground);
+  --rmf-color-border: var(--border);
+  --rmf-radius-md: var(--radius);
+  --rmf-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.35);
+}
+
+@theme {
+  --color-rmf-page: var(--rmf-color-page);
+  --color-rmf-surface: var(--rmf-color-surface);
+  --color-rmf-fg: var(--rmf-color-fg);
+  --color-rmf-muted: var(--rmf-color-muted);
+  --color-rmf-subtle: var(--rmf-color-subtle);
+  --color-rmf-border: var(--rmf-color-border);
+  --radius-rmf-md: var(--rmf-radius-md);
+  --shadow-rmf-sm: var(--rmf-shadow-sm);
+
+  /* Company custom screens. sm/md/lg/xl keep Tailwind defaults. */
+  --breakpoint-compact: 500px;
+  --breakpoint-comfortable: 560px;
+  --breakpoint-wideMobile: 740px;
+}

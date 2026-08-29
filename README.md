@@ -1,0 +1,180 @@
+# Runtime MF React remote starter
+
+Standalone Vite + React application and Runtime MF remote baseline for
+`runtime-mf-shell`.
+
+> The repository is in its baseline-copy phase. Federation identity is neutral,
+> but the copied demo/conformance pages are intentionally still present. Do not
+> publish this revision as the finished GitHub template.
+
+## Template lineage
+
+- source repository: `tryproxy/runtime-mf-module`;
+- source branch: `dev`;
+- source commit: `7de1c9cb3c4c2d092f332410cba42e14277a28ea`;
+- copied from source-controlled files only on 2026-08-29;
+- target repository identity, `.git`, origin, branch, and `.codegraph` were
+  preserved;
+- source `.git`, `.codegraph`, `node_modules`, `dist`, caches, and local `.env*`
+  files were not copied.
+
+The tracked `env.example` is intentionally retained as public documentation. It
+must never contain credentials, tokens, or product secrets.
+
+## Coordinates
+
+Runtime coordinates live in [`remote.config.ts`](./remote.config.ts); repository
+package identity remains in `package.json`:
+
+| Coordinate          | Baseline value                    |
+| ------------------- | --------------------------------- |
+| Package             | `runtime-mf-react-remote-starter` |
+| Module id           | `starter`                         |
+| Federation producer | `runtime_mf_react_remote_starter` |
+| Display name        | `Starter Remote`                  |
+| Local port          | `5004`                            |
+
+Shell-owned registration examples are documented here but must not be imported
+by the remote:
+
+| Coordinate                    | Example value                        |
+| ----------------------------- | ------------------------------------ |
+| Route/basename                | `/starter`                           |
+| Federation alias              | `starter_remote`                     |
+| Load request                  | `starter_remote/mount`               |
+| Manifest environment variable | `VITE_STARTER_REMOTE_MANIFEST_URL`   |
+| Example remote origin         | `https://starter-remote.example.com` |
+| Example shell origin          | `https://shell.example.com`          |
+
+The embedded router always uses the `basename` supplied to `mount()`. It does
+not use `/starter` as an application fallback.
+
+## Preflight decisions
+
+### Visual snapshot
+
+The candidate visual source is `runtime-mf-shell` commit
+`1cdf0f83ce3fe20c49d6c173a97f18584b9a3055`. The approved initial allowlist is
+the following reviewed subset, not the complete shell stylesheet:
+
+- Geist Variable as `--font-sans` and `--font-heading`;
+- Tailwind v4 default spacing and standard `sm`/`md`/`lg`/`xl` breakpoints;
+- custom breakpoints `compact: 500px`, `comfortable: 560px`, and
+  `wideMobile: 740px`;
+- radius `0.625rem`, with the current shadcn derived radius scale;
+- focus treatment `outline-ring/50` and the semantic ring values below;
+- `--rmf-color-page`, `surface`, `fg`, `muted`, `subtle`, `border`,
+  `--rmf-radius-md`, and `--rmf-shadow-sm` mapped to the corresponding local
+  shadcn semantics without redefining host-owned `--rmf-*` values;
+- light shadow `0 1px 2px rgb(15 23 42 / 0.06)` and dark shadow
+  `0 1px 2px rgb(0 0 0 / 0.35)`.
+
+| Semantic                   | Light                       | Dark                        |
+| -------------------------- | --------------------------- | --------------------------- |
+| background                 | `oklch(1 0 0)`              | `oklch(0.145 0 0)`          |
+| foreground                 | `oklch(0.145 0 0)`          | `oklch(0.985 0 0)`          |
+| card / popover             | `oklch(1 0 0)`              | `oklch(0.205 0 0)`          |
+| primary                    | `oklch(0.205 0 0)`          | `oklch(0.922 0 0)`          |
+| primary foreground         | `oklch(0.985 0 0)`          | `oklch(0.205 0 0)`          |
+| secondary / muted / accent | `oklch(0.97 0 0)`           | `oklch(0.269 0 0)`          |
+| muted foreground           | `oklch(0.556 0 0)`          | `oklch(0.708 0 0)`          |
+| destructive                | `oklch(0.577 0.245 27.325)` | `oklch(0.704 0.191 22.216)` |
+| border                     | `oklch(0.922 0 0)`          | `oklch(1 0 0 / 22%)`        |
+| input                      | `oklch(0.922 0 0)`          | `oklch(0.45 0 0)`           |
+| ring                       | `oklch(0.708 0 0)`          | `oklch(0.556 0 0)`          |
+
+The candidate primitive behavior is the shell's reviewed Button, Input/Label,
+Card, Alert, Dialog, Select, Dropdown Menu, Tooltip, and Toast surface at that
+commit. Portal placement and embedded document ownership are deliberately
+overridden by the contract below. Shell chrome primitives are excluded.
+
+Do not copy shell navigation/header/account chrome, ASO compatibility selectors,
+or ASO-matching page-canvas values merely because they exist in shell CSS. The
+visual phase must record light/dark reference captures before accepting the
+snapshot.
+
+Reference captures are not yet recorded while the shell-owned Playwright work is
+in progress. Therefore the visual snapshot gate remains open even though its
+source values and exclusions are fixed here.
+
+### Portal behavior
+
+- Portal DOM belongs below the remote mount container. The mount boundary owns
+  `position: relative` and `isolation: isolate`; overlays use that containing
+  block rather than the viewport or `document.body`.
+- Embedded overlays cover only the remote slot. Remote dropdown/tooltip layers
+  use local layer `40`; modal/notification layers use local layer `50`. The
+  isolated stacking context prevents those numbers from competing with shell
+  chrome z-indexes.
+- Embedded primitives must not lock `html`/`body` scrolling or set `aria-hidden`
+  on shell siblings. Any scroll containment or inert state is limited to the
+  remote mount subtree.
+- A remote must not leave body attributes/styles, focus guards, listeners,
+  notifications, or orphaned nodes after close or unmount.
+- Normal close returns focus to the trigger when it still exists. On route
+  unmount the remote performs no cross-boundary focus request; it only guarantees
+  that focus is not left on a detached remote node. Shell route focus remains a
+  shell responsibility because HostBridge has no focus-management contract.
+- An explicit component-level container override may narrow the boundary but may
+  not silently escape to `document.body`.
+
+### Verification boundary
+
+The starter will keep focused checks for route/nav projection, per-mount state,
+auth modes, mount/unmount cleanup, and emitted artifacts. Visual, responsive,
+focus, and shell-containment behavior also receives a manual embedded proof.
+Product-domain tests and a cross-framework conformance framework are outside the
+starter repository.
+
+## Phase-one gate status
+
+- PASS: source-controlled baseline copy and target repository identity.
+- PASS: frozen install, TypeScript, lint without errors, and production build.
+- PASS: federation identity, `./mount`, `nav.json`, assets, and empty shared list.
+- OPEN: light/dark reference captures for the visual snapshot.
+- FAIL (expected baseline defect): the current `./mount` graph references the
+  copied `app-*.css`, which still contains `:root`, `.dark`, `html`, `body`, link,
+  and universal Tailwind preflight rules. Before embedded acceptance, split
+  standalone-only CSS from the embedded entry, scope embedded semantics/base
+  rules below the mount/portal roots, and re-run artifact inspection.
+
+The repository is a valid neutralized baseline, not yet an embedded-safe
+template. The failed CSS gate must be resolved before permanent shell
+registration or template publication.
+
+## Current surfaces
+
+| Surface                         | Role                                         |
+| ------------------------------- | -------------------------------------------- |
+| `./mount`                       | Framework-neutral Runtime MF lifecycle entry |
+| `nav.json`                      | Shell-consumed child navigation artifact     |
+| `src/app/main.tsx`              | Standalone entry                             |
+| `src/app/entry/mount.tsx`       | Embedded entry using the React adapter       |
+| `src/app/model/nav-manifest.ts` | Current route/navigation source              |
+
+The copied crash, protected request, technical cards, and demo form are temporary
+baseline material. The neutral-application phase removes them and replaces the
+surface with overview and optional patterns routes.
+
+## Local development
+
+Requirements:
+
+- Node `22.12.0` is recorded in `.node-version`;
+- `package.json` also accepts the Vite-supported Node 20 line;
+- pnpm is pinned through the `packageManager` field.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm dev
+pnpm build
+pnpm preview
+```
+
+Standalone development and preview use `http://localhost:5004`. The shell-side
+local registration points `VITE_STARTER_REMOTE_MANIFEST_URL` to
+`http://localhost:5004/mf-manifest.json`.
+
+The remote owns React and ReactDOM (`shared: {}`). Shell chrome, top-level
+history, credentials, theme, locale, and the supplied basename remain shell
+owned through `HostBridge` and the lifecycle contract.
