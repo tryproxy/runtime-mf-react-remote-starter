@@ -93,9 +93,10 @@ or ASO-matching page-canvas values merely because they exist in shell CSS. The
 visual phase must record light/dark reference captures before accepting the
 snapshot.
 
-Reference captures are not yet recorded while the shell-owned Playwright work is
-in progress. Therefore the visual snapshot gate remains open even though its
-source values and exclusions are fixed here.
+Reference captures are not yet recorded. The shell Playwright suite exists
+and targets the registered React demo; it does not close this visual gate.
+The visual snapshot gate remains open even though its source values and
+exclusions are fixed here.
 
 ### Portal behavior
 
