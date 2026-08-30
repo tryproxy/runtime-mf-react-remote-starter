@@ -1,10 +1,5 @@
 import { navPagePath, remoteNavManifest } from '@/app/model/nav-manifest';
-import {
-  APP_LOCALES,
-  type AppLocale,
-  isAppLocale,
-  persistLocale,
-} from '@/shared/i18n';
+import { APP_LOCALES, type AppLocale, isAppLocale } from '@/shared/i18n';
 import { cn } from '@/shared/lib';
 import {
   Select,
@@ -19,9 +14,13 @@ import { useTranslation } from 'react-i18next';
 type ModuleNavProps = {
   /** Standalone only — when embedded, shell owns the language switch. */
   showLocaleSwitch?: boolean;
+  onLocaleChange?: (locale: AppLocale) => void;
 };
 
-export function ModuleNav({ showLocaleSwitch = false }: ModuleNavProps) {
+export function ModuleNav({
+  onLocaleChange,
+  showLocaleSwitch = false,
+}: ModuleNavProps) {
   const { t, i18n } = useTranslation();
   const locale: AppLocale = isAppLocale(i18n.language) ? i18n.language : 'en';
 
@@ -60,7 +59,7 @@ export function ModuleNav({ showLocaleSwitch = false }: ModuleNavProps) {
             value={locale}
             onValueChange={(value) => {
               const next = value as AppLocale;
-              persistLocale(next);
+              onLocaleChange?.(next);
               void i18n.changeLanguage(next);
             }}
           >

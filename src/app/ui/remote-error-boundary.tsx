@@ -1,8 +1,10 @@
 import { RemoteErrorFallback } from '@/shared/ui/remote-error-fallback';
+import type { HostTelemetry } from '@platform/runtime-mf-contract';
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 type RemoteErrorBoundaryProps = {
   children: ReactNode;
+  telemetry?: HostTelemetry;
 };
 
 type RemoteErrorBoundaryState = {
@@ -20,6 +22,14 @@ export class RemoteErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
+    if (this.props.telemetry) {
+      this.props.telemetry.captureException(error, {
+        source: 'react-error-boundary',
+        componentStack: info.componentStack,
+      });
+      return;
+    }
+
     console.error('[RemoteErrorBoundary]', error, info.componentStack);
   }
 

@@ -116,6 +116,15 @@ if (!mountCss.includes('[data-rmf-root]')) {
   fail('./mount CSS does not contain the remote root scope');
 }
 
+const portalSemanticReset =
+  /[^{}]*\[data-rmf-portal-root\][^{}]*\{[^{}]*--(?:background|foreground|card|popover|primary|secondary|muted|accent|border|input|ring):/m;
+
+if (portalSemanticReset.test(mountCss)) {
+  fail(
+    'the portal root resets semantic theme tokens instead of inheriting them'
+  );
+}
+
 const indexHtml = fs.readFileSync(requireArtifact('index.html'), 'utf8');
 const standaloneStylesheetMatch = indexHtml.match(
   /<link[^>]+rel=["']stylesheet["'][^>]+href=["']([^"']+\.css)["']/

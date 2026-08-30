@@ -3,20 +3,6 @@
  * App-level composites (Panel, etc.) live beside this folder under shared/ui/.
  */
 export { Alert, AlertDescription, AlertTitle, AlertAction } from './alert';
-export {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogMedia,
-  AlertDialogOverlay,
-  AlertDialogPortal,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from './alert-dialog';
 export { Badge, badgeVariants } from './badge';
 export { Button, buttonVariants } from './button';
 export { Calendar, CalendarDayButton } from './calendar';
@@ -118,8 +104,6 @@ export {
   SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
   SelectSeparator,
   SelectTrigger,
   SelectValue,
@@ -129,6 +113,7 @@ export {
   Sheet,
   SheetTrigger,
   SheetClose,
+  SheetPortal,
   SheetContent,
   SheetHeader,
   SheetFooter,

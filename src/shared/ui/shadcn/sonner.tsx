@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 import {
   CircleCheckIcon,
@@ -7,40 +6,20 @@ import {
   OctagonXIcon,
   Loader2Icon,
 } from 'lucide-react';
+import { useRemoteToasterId } from '@/shared/ui/remote-toast';
 
-/** Sync Sonner theme with module/shell `.dark` / `data-rmf-theme` (no next-themes). */
-function useDocumentTheme(): NonNullable<ToasterProps['theme']> {
-  const [theme, setTheme] = useState<NonNullable<ToasterProps['theme']>>(() =>
-    typeof document !== 'undefined' &&
-    document.documentElement.classList.contains('dark')
-      ? 'dark'
-      : 'light'
-  );
+type RemoteToasterProps = Omit<ToasterProps, 'id' | 'theme'> & {
+  theme: NonNullable<ToasterProps['theme']>;
+};
 
-  useEffect(() => {
-    const root = document.documentElement;
-    const update = () => {
-      setTheme(root.classList.contains('dark') ? 'dark' : 'light');
-    };
-    update();
-    const observer = new MutationObserver(update);
-    observer.observe(root, {
-      attributes: true,
-      attributeFilter: ['class', 'data-rmf-theme'],
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  return theme;
-}
-
-const Toaster = ({ ...props }: ToasterProps) => {
-  const theme = useDocumentTheme();
+const Toaster = ({ theme, ...props }: RemoteToasterProps) => {
+  const toasterId = useRemoteToasterId();
 
   return (
     <Sonner
+      id={toasterId}
       theme={theme}
-      className="toaster group z-[200]"
+      className="toaster group !absolute z-[200]"
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,

@@ -1,12 +1,12 @@
 import type { Plugin } from 'vite';
-import { remoteNavManifest } from './src/app/model/nav-manifest';
+import { serializeRemoteNavManifest } from './src/app/model/nav-manifest';
 
 /**
  * Serve / emit `nav.json` from the same TS source as routes + ModuleNav.
  * PoC: shell fetches this before mounting the remote UI.
  */
 export function rmfNavJson(): Plugin {
-  const source = `${JSON.stringify(remoteNavManifest, null, 2)}\n`;
+  const source = serializeRemoteNavManifest();
 
   return {
     name: 'rmf-nav-json',

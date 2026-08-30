@@ -1,4 +1,4 @@
-import { useHostBridge } from '@/shared/lib';
+import { createHostFetch, useHostBridge } from '@/shared/lib';
 import {
   Button,
   Card,
@@ -42,26 +42,11 @@ export function ProtectedMeButton() {
       return;
     }
 
-    const { http } = bridge.auth;
-
-    if (http.mode !== 'bearer' || !http.getAccessToken) {
-      setError(t('home.meNoBearer'));
-      return;
-    }
-
-    const token = await http.getAccessToken();
-    if (!token) {
-      setError(t('home.meNoToken'));
-      return;
-    }
-
     setLoading(true);
     try {
-      const response = await fetch(`${API_BASE}/v1/account/me`, {
+      const hostFetch = createHostFetch(bridge.auth.http);
+      const response = await hostFetch(`${API_BASE}/v1/account/me`, {
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
 
       if (!response.ok) {

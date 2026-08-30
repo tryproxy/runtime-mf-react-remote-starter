@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "verify:artifacts": "node scripts/verify-artifacts.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -47,6 +49,7 @@
     "@eslint/js": "^9.33.0",
     "@module-federation/vite": "^1.20.5",
     "@tailwindcss/vite": "^4.1.12",
+    "@testing-library/react": "^16.3.3",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",
@@ -60,6 +63,7 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
     "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
     "lint-staged": "^16.1.5",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
@@ -67,7 +71,8 @@
     "typescript-eslint": "^8.39.1",
     "vite": "^7.1.2",
     "vite-plugin-svgr": "^4.3.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.1.11"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [

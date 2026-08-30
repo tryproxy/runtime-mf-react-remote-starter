@@ -3,8 +3,9 @@
 Standalone Vite + React application and Runtime MF remote baseline for
 `runtime-mf-shell`.
 
-> The repository has passed its early standalone/embedded integration gate.
-> Federation identity and CSS ownership are neutral, but the copied
+> The repository has passed its early standalone/embedded integration gate and
+> runtime-isolation cut. Federation identity, CSS ownership, per-mount state,
+> auth policy, telemetry, and portals are neutral, but the copied
 > demo/conformance pages are intentionally still present. Do not publish this
 > revision as the finished GitHub template.
 
@@ -122,7 +123,7 @@ exclusions are fixed here.
 
 ### Verification boundary
 
-The starter will keep focused checks for route/nav projection, per-mount state,
+The starter keeps focused checks for route/nav projection, per-mount state,
 auth modes, mount/unmount cleanup, and emitted artifacts. Visual, responsive,
 focus, and shell-containment behavior also receives a manual embedded proof.
 Product-domain tests and a cross-framework conformance framework are outside the
@@ -135,7 +136,7 @@ starter repository.
 - PASS: federation identity, `./mount`, `nav.json`, assets, and empty shared list.
 - PASS: standalone document CSS is isolated in `standalone.css`; the embedded
   graph omits Tailwind Preflight and scopes semantic/base rules to
-  `[data-rmf-root]` and `[data-rmf-portal-root]`.
+  `[data-rmf-root]`; the descendant portal root inherits the same theme tokens.
 - PASS: `bundleAllCSS: false` plus distinct standalone/embedded CSS module ids
   leaves the standalone asset out of the `./mount` manifest graph while keeping
   one embedded stylesheet declared and loadable.
@@ -156,11 +157,32 @@ starter repository.
   remote-owned root, unmount removes that root, and the standalone preview owns
   its document theme/canvas. A representative `p-4 border` surface computed to
   `padding: 16px` and `border: 1px solid` in the production preview.
+- PASS: each embedded mount owns its i18next instance and follows independent
+  HostBridge theme/locale updates without remounting or mutating the shell
+  document root. Mount-container theme markers are restored on cleanup.
+- PASS: `createHostFetch()` requests a fresh bearer token immediately before
+  every request or uses `credentials: 'include'` for cookie mode.
+  `requestSignOut()` delegates to the host without reading or clearing storage.
+- PASS: embedded render failures use host telemetry; standalone rendering keeps
+  an explicit console fallback.
+- PASS: each mount renders one themed `[data-rmf-portal-root]`. Dialog and Sheet
+  enforce non-modal document behavior with slot-local overlays; Dropdown Menu,
+  Popover, and Tooltip use non-modal Radix portals; Select is a local accessible
+  listbox. All default to the mount-owned container and retained wrappers allow
+  a mount-local explicit override. The unused document-modal AlertDialog was removed.
+  Sonner notifications are toaster-scoped and dismissed during provider cleanup.
+- PASS: 18 focused Vitest checks cover auth modes, independent mount sessions,
+  embedded-import ownership, route/nav projection, telemetry, portal
+  containment, theme inheritance, focus return, and cleanup.
+- PASS: the latest disposable Shell run against the updated starter passed all
+  11 Playwright scenarios, including theme/locale propagation, normal Select
+  close, forced route unmount with an open portal, and clean re-entry. The
+  temporary registration did not modify the Shell working tree.
 - OPEN: light/dark reference captures for the visual snapshot.
 
-The repository is now an embedded-CSS-safe neutralized baseline. It is not yet
-the finished template: the demo surface, per-mount i18n, portal boundary, auth
-helper, telemetry, visual curation, and final publishing/maintenance work remain.
+The repository is now an embedded-CSS-safe, mount-isolated baseline. It is not
+yet the finished template: the demo surface, visual curation, dependency
+reduction, and final publishing/maintenance work remain.
 
 ## Current surfaces
 
@@ -170,6 +192,9 @@ helper, telemetry, visual curation, and final publishing/maintenance work remain
 | `nav.json`                            | Shell-consumed child navigation artifact            |
 | `src/app/main.tsx`                    | Standalone entry                                    |
 | `src/app/entry/mount.tsx`             | Embedded entry using the React adapter              |
+| `src/shared/lib/host-auth.ts`         | Bearer/cookie request and host sign-out helpers     |
+| `src/shared/ui/remote-portal/`        | Mount-owned overlay/portal destination              |
+| `src/shared/ui/remote-toast/`         | Mount-owned Sonner routing and cleanup              |
 | `src/app/styles/index.css`            | Embedded-safe CSS entry                             |
 | `src/app/styles/standalone.css`       | Standalone-only document ownership                  |
 | `vite-plugin-rmf-remote-css-layer.ts` | Embedded-only cascade-layer transform               |
@@ -191,6 +216,7 @@ Requirements:
 ```bash
 pnpm install --frozen-lockfile
 pnpm dev
+pnpm test
 pnpm build
 pnpm verify:artifacts
 pnpm preview

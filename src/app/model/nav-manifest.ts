@@ -40,3 +40,8 @@ export type RemoteNavPageId = (typeof remoteNavManifest.pages)[number]['id'];
 export function navPagePath(segment: string): string {
   return segment ? `/${segment}` : '/';
 }
+
+/** Exact payload served in dev and emitted as dist/nav.json. */
+export function serializeRemoteNavManifest(): string {
+  return `${JSON.stringify(remoteNavManifest, null, 2)}\n`;
+}

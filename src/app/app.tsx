@@ -1,19 +1,10 @@
-import {
-  navPagePath,
-  remoteNavManifest,
-  type RemoteNavPageId,
-} from '@/app/model/nav-manifest';
+import { navPagePath, remoteNavManifest } from '@/app/model/nav-manifest';
+import { pageElement } from '@/app/model/page-element';
 import { ModuleNav } from '@/app/ui/module-nav';
 import { ProtectedMeButton } from '@/app/ui/protected-me-button';
-import { AboutPage } from '@/pages/about';
-import { CrashPage } from '@/pages/crash';
-import { DetailsPage } from '@/pages/details';
-import { FormPage } from '@/pages/form';
-import { HomePage } from '@/pages/home';
-import { HostBridgeProvider } from '@/shared/lib';
 import { Toaster, TooltipProvider } from '@/shared/ui/shadcn';
-import { createMockHostBridge } from '@platform/runtime-mf-contract';
-import type { ReactElement } from 'react';
+import type { ModuleTheme } from '@/shared/lib';
+import type { AppLocale } from '@/shared/i18n';
 import {
   BrowserRouter,
   HashRouter,
@@ -25,38 +16,30 @@ import {
 type AppProps = {
   basename?: string;
   isEmbedded?: boolean;
+  onStandaloneLocaleChange?: (locale: AppLocale) => void;
+  theme: ModuleTheme;
 };
-
-function pageElement(
-  pageId: RemoteNavPageId,
-  isEmbedded: boolean,
-  basename: string
-): ReactElement {
-  switch (pageId) {
-    case 'overview':
-      return <HomePage isEmbedded={isEmbedded} basename={basename} />;
-    case 'details':
-      return <DetailsPage basename={basename} />;
-    case 'about':
-      return <AboutPage basename={basename} />;
-    case 'form':
-      return <FormPage basename={basename} />;
-    case 'crash':
-      return <CrashPage />;
-  }
-}
 
 function AppRoutes({
   isEmbedded,
   basename,
+  onStandaloneLocaleChange,
+  theme,
 }: {
   isEmbedded: boolean;
   basename: string;
+  onStandaloneLocaleChange?: (locale: AppLocale) => void;
+  theme: ModuleTheme;
 }) {
   return (
     <TooltipProvider>
       <section className="min-w-0 space-y-6 overflow-x-auto">
-        {!isEmbedded ? <ModuleNav showLocaleSwitch /> : null}
+        {!isEmbedded ? (
+          <ModuleNav
+            showLocaleSwitch
+            onLocaleChange={onStandaloneLocaleChange}
+          />
+        ) : null}
 
         <ProtectedMeButton />
 
@@ -71,31 +54,37 @@ function AppRoutes({
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
 
-        <Toaster richColors closeButton position="top-right" />
+        <Toaster theme={theme} richColors closeButton position="top-right" />
       </section>
     </TooltipProvider>
   );
 }
 
-function App({ basename = '', isEmbedded = false }: AppProps) {
+function App({
+  basename = '',
+  isEmbedded = false,
+  onStandaloneLocaleChange,
+  theme,
+}: AppProps) {
   const effectiveBasename = isEmbedded ? basename : '';
 
   if (isEmbedded) {
     return (
       <BrowserRouter basename={effectiveBasename}>
-        <AppRoutes isEmbedded basename={effectiveBasename} />
+        <AppRoutes isEmbedded basename={effectiveBasename} theme={theme} />
       </BrowserRouter>
     );
   }
 
-  const mockBridge = createMockHostBridge({ theme: 'dark', locale: 'en' });
-
   return (
-    <HostBridgeProvider value={mockBridge}>
-      <HashRouter>
-        <AppRoutes isEmbedded={false} basename={effectiveBasename} />
-      </HashRouter>
-    </HostBridgeProvider>
+    <HashRouter>
+      <AppRoutes
+        isEmbedded={false}
+        basename={effectiveBasename}
+        theme={theme}
+        onStandaloneLocaleChange={onStandaloneLocaleChange}
+      />
+    </HashRouter>
   );
 }
 

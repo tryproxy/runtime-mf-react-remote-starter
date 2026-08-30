@@ -13,7 +13,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:where([data-rmf-root], [data-rmf-portal-root]) {
+:where([data-rmf-root]) {
   color-scheme: light;
   --background: var(--rmf-color-page, oklch(1 0 0));
   --foreground: var(--rmf-color-fg, oklch(0.145 0 0));
@@ -50,7 +50,7 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-:where([data-rmf-root].dark, [data-rmf-portal-root].dark) {
+:where([data-rmf-root].dark) {
   color-scheme: dark;
   --background: var(--rmf-color-page, oklch(0.145 0 0));
   --foreground: var(--rmf-color-fg, oklch(0.985 0 0));
@@ -87,10 +87,10 @@
 }
 
 @layer base {
-  :where([data-rmf-root], [data-rmf-portal-root]),
-  :where([data-rmf-root], [data-rmf-portal-root]) *,
-  :where([data-rmf-root], [data-rmf-portal-root]) *::before,
-  :where([data-rmf-root], [data-rmf-portal-root]) *::after {
+  :where([data-rmf-root]),
+  :where([data-rmf-root]) *,
+  :where([data-rmf-root]) *::before,
+  :where([data-rmf-root]) *::after {
     box-sizing: border-box;
     border-width: 0;
     border-style: solid;
@@ -99,7 +99,7 @@
     outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
   }
 
-  :where([data-rmf-root], [data-rmf-portal-root]) {
+  :where([data-rmf-root]) {
     min-width: 0;
     background: var(--background);
     color: var(--foreground);
@@ -107,8 +107,7 @@
     line-height: 1.5;
   }
 
-  :where([data-rmf-root], [data-rmf-portal-root])
-    :where(button, input, optgroup, select, textarea) {
+  :where([data-rmf-root]) :where(button, input, optgroup, select, textarea) {
     margin: 0;
     padding: 0;
     color: inherit;
@@ -117,12 +116,12 @@
     background-color: transparent;
   }
 
-  :where([data-rmf-root], [data-rmf-portal-root]) button,
-  :where([data-rmf-root], [data-rmf-portal-root]) [role='button'] {
+  :where([data-rmf-root]) button,
+  :where([data-rmf-root]) [role='button'] {
     cursor: pointer;
   }
 
-  :where([data-rmf-root], [data-rmf-portal-root]) a {
+  :where([data-rmf-root]) a {
     color: inherit;
     text-decoration: none;
   }

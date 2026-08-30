@@ -1,30 +1,24 @@
-import i18n from 'i18next';
+import { createInstance, type i18n as I18nInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { en } from '../locales/en';
 import { ru } from '../locales/ru';
-import { type AppLocale, isAppLocale } from '../model/locale';
+import type { AppLocale } from '../model/locale';
 
-const STORAGE_KEY = 'module-locale';
+/** Create translation state owned by one mount session. */
+export function createAppI18n(locale: AppLocale): I18nInstance {
+  const instance = createInstance();
 
-export function readStoredLocale(): AppLocale {
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  return isAppLocale(stored) ? stored : 'en';
+  void instance.use(initReactI18next).init({
+    resources: {
+      en: { translation: en },
+      ru: { translation: ru },
+      es: { translation: en },
+    },
+    lng: locale,
+    fallbackLng: 'en',
+    initAsync: false,
+    interpolation: { escapeValue: false },
+  });
+
+  return instance;
 }
-
-export function persistLocale(locale: AppLocale): void {
-  window.localStorage.setItem(STORAGE_KEY, locale);
-  document.documentElement.lang = locale;
-}
-
-void i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    ru: { translation: ru },
-    es: { translation: en },
-  },
-  lng: typeof window === 'undefined' ? 'en' : readStoredLocale(),
-  fallbackLng: 'en',
-  interpolation: { escapeValue: false },
-});
-
-export { i18n };

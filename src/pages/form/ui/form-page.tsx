@@ -9,7 +9,6 @@ import {
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { cn } from '@/shared/lib';
@@ -61,6 +60,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/ui/shadcn';
+import { useRemoteToast } from '@/shared/ui/remote-toast';
 
 const TEAMS = ['platform', 'design', 'growth'] as const;
 const FRAMEWORKS = [
@@ -97,6 +97,7 @@ type FormPageProps = {
 
 export function FormPage({ basename }: FormPageProps) {
   const { t } = useTranslation();
+  const toast = useRemoteToast();
   const schema = useMemo(() => buildSchema(t), [t]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
