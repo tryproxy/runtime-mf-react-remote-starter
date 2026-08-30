@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { applyModuleTheme, type ModuleTheme } from './apply-module-theme';
+import { useEffect, useState } from 'react';
+import type { ModuleTheme } from './apply-module-theme';
 
 type ThemeHostBridge = {
   theme: {
@@ -8,21 +8,18 @@ type ThemeHostBridge = {
   };
 };
 
-/** Sync module/shadcn dark mode with shell theme when embedded. */
-export function useBridgeTheme(
-  bridge: ThemeHostBridge | null,
-  mountRoot?: HTMLElement | null
-): void {
-  useEffect(() => {
-    if (!bridge) {
-      return;
-    }
+/** Subscribe to the shell theme without mutating the shell document. */
+export function useBridgeTheme(bridge: ThemeHostBridge): ModuleTheme {
+  const [theme, setTheme] = useState(() => bridge.theme.getSnapshot().mode);
 
+  useEffect(() => {
     const apply = () => {
-      applyModuleTheme(bridge.theme.getSnapshot().mode, mountRoot);
+      setTheme(bridge.theme.getSnapshot().mode);
     };
 
     apply();
     return bridge.theme.subscribe(apply);
-  }, [bridge, mountRoot]);
+  }, [bridge]);
+
+  return theme;
 }

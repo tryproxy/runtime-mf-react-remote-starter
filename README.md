@@ -3,9 +3,10 @@
 Standalone Vite + React application and Runtime MF remote baseline for
 `runtime-mf-shell`.
 
-> The repository is in its baseline-copy phase. Federation identity is neutral,
-> but the copied demo/conformance pages are intentionally still present. Do not
-> publish this revision as the finished GitHub template.
+> The repository has passed its early standalone/embedded integration gate.
+> Federation identity and CSS ownership are neutral, but the copied
+> demo/conformance pages are intentionally still present. Do not publish this
+> revision as the finished GitHub template.
 
 ## Template lineage
 
@@ -127,31 +128,53 @@ focus, and shell-containment behavior also receives a manual embedded proof.
 Product-domain tests and a cross-framework conformance framework are outside the
 starter repository.
 
-## Phase-one gate status
+## Early integration gate status
 
 - PASS: source-controlled baseline copy and target repository identity.
 - PASS: frozen install, TypeScript, lint without errors, and production build.
 - PASS: federation identity, `./mount`, `nav.json`, assets, and empty shared list.
+- PASS: standalone document CSS is isolated in `standalone.css`; the embedded
+  graph omits Tailwind Preflight and scopes semantic/base rules to
+  `[data-rmf-root]` and `[data-rmf-portal-root]`.
+- PASS: `bundleAllCSS: false` plus distinct standalone/embedded CSS module ids
+  leaves the standalone asset out of the `./mount` manifest graph while keeping
+  one embedded stylesheet declared and loadable.
+- PASS: the CSS-layer plugin excludes `?standalone`; `main.tsx` imports
+  standalone Preflight before utilities so `base` cannot override spacing and
+  border utilities.
+- PASS: the artifact verifier rejects missing assets, embedded
+  `:root`/`:host`/`html`/`body`/`#root`, unscoped link/universal resets and
+  theme selectors,
+  definitions of host-owned `--rmf-*`, an embedded-only wrapper in standalone
+  CSS, and standalone `base` appearing after `utilities`.
+- PASS: a disposable Shell registration at `/starter` loaded the production
+  preview on `:5004`; shell Playwright passed mount, navigation/deep links,
+  reload, back/forward, leave/re-enter, theme/locale continuity, and chrome
+  containment (8 passed, 3 intentionally skipped demo-only scenarios).
+- PASS: focused Chromium inspection proved the Shell-loaded stylesheet matches
+  the single CSS asset declared for `./mount`, theme changes reach the
+  remote-owned root, unmount removes that root, and the standalone preview owns
+  its document theme/canvas. A representative `p-4 border` surface computed to
+  `padding: 16px` and `border: 1px solid` in the production preview.
 - OPEN: light/dark reference captures for the visual snapshot.
-- FAIL (expected baseline defect): the current `./mount` graph references the
-  copied `app-*.css`, which still contains `:root`, `.dark`, `html`, `body`, link,
-  and universal Tailwind preflight rules. Before embedded acceptance, split
-  standalone-only CSS from the embedded entry, scope embedded semantics/base
-  rules below the mount/portal roots, and re-run artifact inspection.
 
-The repository is a valid neutralized baseline, not yet an embedded-safe
-template. The failed CSS gate must be resolved before permanent shell
-registration or template publication.
+The repository is now an embedded-CSS-safe neutralized baseline. It is not yet
+the finished template: the demo surface, per-mount i18n, portal boundary, auth
+helper, telemetry, visual curation, and final publishing/maintenance work remain.
 
 ## Current surfaces
 
-| Surface                         | Role                                         |
-| ------------------------------- | -------------------------------------------- |
-| `./mount`                       | Framework-neutral Runtime MF lifecycle entry |
-| `nav.json`                      | Shell-consumed child navigation artifact     |
-| `src/app/main.tsx`              | Standalone entry                             |
-| `src/app/entry/mount.tsx`       | Embedded entry using the React adapter       |
-| `src/app/model/nav-manifest.ts` | Current route/navigation source              |
+| Surface                               | Role                                                |
+| ------------------------------------- | --------------------------------------------------- |
+| `./mount`                             | Framework-neutral Runtime MF lifecycle entry        |
+| `nav.json`                            | Shell-consumed child navigation artifact            |
+| `src/app/main.tsx`                    | Standalone entry                                    |
+| `src/app/entry/mount.tsx`             | Embedded entry using the React adapter              |
+| `src/app/styles/index.css`            | Embedded-safe CSS entry                             |
+| `src/app/styles/standalone.css`       | Standalone-only document ownership                  |
+| `vite-plugin-rmf-remote-css-layer.ts` | Embedded-only cascade-layer transform               |
+| `src/app/model/nav-manifest.ts`       | Current route/navigation source                     |
+| `scripts/verify-artifacts.mjs`        | Federation, embedded CSS, and standalone layer gate |
 
 The copied crash, protected request, technical cards, and demo form are temporary
 baseline material. The neutral-application phase removes them and replaces the
@@ -169,6 +192,7 @@ Requirements:
 pnpm install --frozen-lockfile
 pnpm dev
 pnpm build
+pnpm verify:artifacts
 pnpm preview
 ```
 

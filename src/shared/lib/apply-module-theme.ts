@@ -1,15 +1,10 @@
 export type ModuleTheme = 'light' | 'dark';
 
-/** Keep shadcn `.dark` and MF `data-rmf-theme` in sync (document + optional mount root). */
+/** Apply standalone theme ownership to an explicitly supplied element. */
 export function applyModuleTheme(
   theme: ModuleTheme,
-  mountRoot?: HTMLElement | null
+  target: HTMLElement
 ): void {
-  document.documentElement.dataset.rmfTheme = theme;
-  document.documentElement.classList.toggle('dark', theme === 'dark');
-
-  if (mountRoot) {
-    mountRoot.dataset.rmfTheme = theme;
-    mountRoot.classList.toggle('dark', theme === 'dark');
-  }
+  target.dataset.rmfTheme = theme;
+  target.classList.toggle('dark', theme === 'dark');
 }

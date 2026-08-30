@@ -6,16 +6,21 @@ import type { HostBridge } from '@platform/runtime-mf-contract';
 type RemoteAppProps = {
   bridge: HostBridge;
   basename: string;
-  mountRoot?: HTMLElement | null;
 };
 
-export function RemoteApp({ bridge, basename, mountRoot }: RemoteAppProps) {
+export function RemoteApp({ bridge, basename }: RemoteAppProps) {
   useBridgeLocale(bridge);
-  useBridgeTheme(bridge, mountRoot);
+  const theme = useBridgeTheme(bridge);
 
   return (
-    <HostBridgeProvider value={bridge}>
-      <App isEmbedded basename={basename} />
-    </HostBridgeProvider>
+    <div
+      className={theme === 'dark' ? 'dark' : undefined}
+      data-rmf-root=""
+      data-rmf-theme={theme}
+    >
+      <HostBridgeProvider value={bridge}>
+        <App isEmbedded basename={basename} />
+      </HostBridgeProvider>
+    </div>
   );
 }

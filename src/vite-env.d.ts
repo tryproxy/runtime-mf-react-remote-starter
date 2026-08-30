@@ -1,6 +1,8 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-svgr/client" />
 
+declare module '*.css?standalone';
+
 interface ImportMetaEnv {
   readonly VITE_API_BASE_URL: string;
 }

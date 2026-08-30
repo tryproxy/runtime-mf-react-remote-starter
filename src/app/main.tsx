@@ -4,13 +4,24 @@ import { RemoteErrorBoundary } from '@/app/ui/remote-error-boundary';
 import { applyModuleTheme } from '@/shared/lib';
 import { remoteConfig } from '../../remote.config';
 import '@/shared/i18n';
-import './styles/index.css';
+// Preflight must establish the base layer before the standalone utility graph.
+// The query marker keeps this graph separate from the federation entry.
+import './styles/standalone.css';
+import './styles/index.css?standalone';
 import App from './app';
 
-document.title = remoteConfig.displayName;
-applyModuleTheme('light');
+const rootElement = document.getElementById('root');
 
-createRoot(document.getElementById('root') as HTMLElement).render(
+if (!rootElement) {
+  throw new Error('Standalone root element #root was not found.');
+}
+
+document.title = remoteConfig.displayName;
+rootElement.dataset.rmfRoot = '';
+applyModuleTheme('light', document.documentElement);
+applyModuleTheme('light', rootElement);
+
+createRoot(rootElement).render(
   <StrictMode>
     <RemoteErrorBoundary>
       <App />
