@@ -70,8 +70,10 @@ describe('RemoteApp mount isolation', () => {
     const englishRoot = englishMount.querySelector('[data-rmf-root]');
     const russianRoot = russianMount.querySelector('[data-rmf-root]');
 
-    expect(within(englishMount).getByText('Remote module')).toBeTruthy();
-    expect(within(russianMount).getByText('Удалённый модуль')).toBeTruthy();
+    expect(within(englishMount).getByText('Starter remote')).toBeTruthy();
+    expect(
+      within(russianMount).getByText('Стартовый remote-модуль')
+    ).toBeTruthy();
     expect(englishRoot?.getAttribute('data-rmf-theme')).toBe('light');
     expect(englishRoot?.getAttribute('lang')).toBe('en');
     expect(russianRoot?.getAttribute('data-rmf-theme')).toBe('dark');
@@ -91,7 +93,9 @@ describe('RemoteApp mount isolation', () => {
       session.setTheme('dark');
     });
 
-    expect(await within(container).findByText('Удалённый модуль')).toBeTruthy();
+    expect(
+      await within(container).findByText('Стартовый remote-модуль')
+    ).toBeTruthy();
     expect(container.querySelector('[data-rmf-root]')).toBe(rootBefore);
     expect(rootBefore?.getAttribute('data-rmf-theme')).toBe('dark');
     expect(rootBefore?.getAttribute('lang')).toBe('ru');

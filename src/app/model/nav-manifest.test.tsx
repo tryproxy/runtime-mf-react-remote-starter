@@ -8,6 +8,15 @@ import { isValidElement } from 'react';
 import { describe, expect, it } from 'vitest';
 
 describe('remote navigation projection', () => {
+  it('publishes only the neutral overview and optional patterns routes', () => {
+    expect(
+      remoteNavManifest.pages.map(({ id, segment }) => ({ id, segment }))
+    ).toEqual([
+      { id: 'overview', segment: '' },
+      { id: 'patterns', segment: 'patterns' },
+    ]);
+  });
+
   it('serializes the exact manifest emitted as nav.json', () => {
     expect(JSON.parse(serializeRemoteNavManifest())).toEqual(remoteNavManifest);
   });
@@ -19,7 +28,7 @@ describe('remote navigation projection', () => {
 
     expect(new Set(paths).size).toBe(paths.length);
     for (const page of remoteNavManifest.pages) {
-      expect(isValidElement(pageElement(page.id, true, '/starter'))).toBe(true);
+      expect(isValidElement(pageElement(page.id))).toBe(true);
     }
   });
 });

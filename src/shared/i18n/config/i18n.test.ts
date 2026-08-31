@@ -6,12 +6,12 @@ describe('createAppI18n', () => {
     const english = createAppI18n('en');
     const russian = createAppI18n('ru');
 
-    expect(english.t('home.title')).toBe('Remote module');
-    expect(russian.t('home.title')).toBe('Удалённый модуль');
+    expect(english.t('overview.title')).toBe('Starter remote');
+    expect(russian.t('overview.title')).toBe('Стартовый remote-модуль');
 
     await english.changeLanguage('ru');
 
-    expect(english.t('home.title')).toBe('Удалённый модуль');
+    expect(english.t('overview.title')).toBe('Стартовый remote-модуль');
     expect(russian.language).toBe('ru');
     expect(english).not.toBe(russian);
   });

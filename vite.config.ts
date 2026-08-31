@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
-import svgr from 'vite-plugin-svgr';
 import { federation } from '@module-federation/vite';
 import { rmfNavJson } from './vite-plugin-rmf-nav-json';
 import { rmfRemoteCssLayer } from './vite-plugin-rmf-remote-css-layer';
@@ -35,9 +34,6 @@ export default defineConfig({
     }),
     tailwindcss(),
     viteTsconfigPaths(),
-    svgr({
-      include: '**/*.svg?react',
-    }),
     federation({
       name: remoteConfig.federationName,
       filename: 'remoteEntry.js',

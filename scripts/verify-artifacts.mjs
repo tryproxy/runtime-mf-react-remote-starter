@@ -159,8 +159,38 @@ if (nav.moduleId !== 'starter') {
   fail('nav.json has the wrong moduleId');
 }
 
-if (!Array.isArray(nav.pages) || nav.pages.length === 0) {
-  fail('nav.json does not contain any pages');
+const expectedPages = [
+  { id: 'overview', segment: '' },
+  { id: 'patterns', segment: 'patterns' },
+];
+const actualPages = Array.isArray(nav.pages)
+  ? nav.pages.map(({ id, segment }) => ({ id, segment }))
+  : null;
+
+if (JSON.stringify(actualPages) !== JSON.stringify(expectedPages)) {
+  fail('nav.json must contain only the overview and patterns pages');
+}
+
+const builtText = fs
+  .readdirSync(distRoot, { recursive: true, withFileTypes: true })
+  .filter((entry) => entry.isFile())
+  .map((entry) =>
+    fs.readFileSync(path.join(entry.parentPath, entry.name), 'utf8')
+  )
+  .join('\n');
+
+const forbiddenDemoCopy = [
+  '/v1/account/me',
+  'Crash module render',
+  'Protected API:',
+  'Ship portal smoke test',
+  'What this proves',
+];
+
+for (const text of forbiddenDemoCopy) {
+  if (builtText.includes(text)) {
+    fail(`built artifacts contain removed demo copy: ${text}`);
+  }
 }
 
 console.log(

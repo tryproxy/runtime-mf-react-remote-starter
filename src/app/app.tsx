@@ -1,10 +1,10 @@
 import { navPagePath, remoteNavManifest } from '@/app/model/nav-manifest';
 import { pageElement } from '@/app/model/page-element';
 import { ModuleNav } from '@/app/ui/module-nav';
-import { ProtectedMeButton } from '@/app/ui/protected-me-button';
 import { Toaster, TooltipProvider } from '@/shared/ui/shadcn';
 import type { ModuleTheme } from '@/shared/lib';
 import type { AppLocale } from '@/shared/i18n';
+import type { ReactNode } from 'react';
 import {
   BrowserRouter,
   HashRouter,
@@ -13,65 +13,54 @@ import {
   Routes,
 } from 'react-router-dom';
 
-type AppProps = {
-  basename?: string;
-  isEmbedded?: boolean;
-  onStandaloneLocaleChange?: (locale: AppLocale) => void;
-  theme: ModuleTheme;
-};
+type AppProps =
+  | {
+      basename: string;
+      isEmbedded: true;
+      theme: ModuleTheme;
+    }
+  | {
+      basename?: never;
+      isEmbedded?: false;
+      onStandaloneLocaleChange: (locale: AppLocale) => void;
+      onStandaloneThemeChange: (theme: ModuleTheme) => void;
+      theme: ModuleTheme;
+    };
 
 function AppRoutes({
-  isEmbedded,
-  basename,
-  onStandaloneLocaleChange,
+  frame,
   theme,
 }: {
-  isEmbedded: boolean;
-  basename: string;
-  onStandaloneLocaleChange?: (locale: AppLocale) => void;
+  frame?: ReactNode;
   theme: ModuleTheme;
 }) {
   return (
     <TooltipProvider>
       <section className="min-w-0 space-y-6 overflow-x-auto">
-        {!isEmbedded ? (
-          <ModuleNav
-            showLocaleSwitch
-            onLocaleChange={onStandaloneLocaleChange}
-          />
-        ) : null}
-
-        <ProtectedMeButton />
+        {frame}
 
         <Routes>
           {remoteNavManifest.pages.map((page) => (
             <Route
               key={page.id}
               path={navPagePath(page.segment)}
-              element={pageElement(page.id, isEmbedded, basename)}
+              element={pageElement(page.id)}
             />
           ))}
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
 
-        <Toaster theme={theme} richColors closeButton position="top-right" />
+        <Toaster richColors closeButton theme={theme} position="top-right" />
       </section>
     </TooltipProvider>
   );
 }
 
-function App({
-  basename = '',
-  isEmbedded = false,
-  onStandaloneLocaleChange,
-  theme,
-}: AppProps) {
-  const effectiveBasename = isEmbedded ? basename : '';
-
-  if (isEmbedded) {
+function App(props: AppProps) {
+  if (props.isEmbedded) {
     return (
-      <BrowserRouter basename={effectiveBasename}>
-        <AppRoutes isEmbedded basename={effectiveBasename} theme={theme} />
+      <BrowserRouter basename={props.basename}>
+        <AppRoutes theme={props.theme} />
       </BrowserRouter>
     );
   }
@@ -79,10 +68,14 @@ function App({
   return (
     <HashRouter>
       <AppRoutes
-        isEmbedded={false}
-        basename={effectiveBasename}
-        theme={theme}
-        onStandaloneLocaleChange={onStandaloneLocaleChange}
+        frame={
+          <ModuleNav
+            theme={props.theme}
+            onLocaleChange={props.onStandaloneLocaleChange}
+            onThemeChange={props.onStandaloneThemeChange}
+          />
+        }
+        theme={props.theme}
       />
     </HashRouter>
   );

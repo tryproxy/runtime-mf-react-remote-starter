@@ -1,6 +1,7 @@
 import { createInstance, type i18n as I18nInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { en } from '../locales/en';
+import { es } from '../locales/es';
 import { ru } from '../locales/ru';
 import type { AppLocale } from '../model/locale';
 
@@ -12,7 +13,7 @@ export function createAppI18n(locale: AppLocale): I18nInstance {
     resources: {
       en: { translation: en },
       ru: { translation: ru },
-      es: { translation: en },
+      es: { translation: es },
     },
     lng: locale,
     fallbackLng: 'en',

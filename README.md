@@ -3,11 +3,11 @@
 Standalone Vite + React application and Runtime MF remote baseline for
 `runtime-mf-shell`.
 
-> The repository has passed its early standalone/embedded integration gate and
-> runtime-isolation cut. Federation identity, CSS ownership, per-mount state,
-> auth policy, telemetry, and portals are neutral, but the copied
-> demo/conformance pages are intentionally still present. Do not publish this
-> revision as the finished GitHub template.
+> The repository has passed its neutral-application cut. Federation identity,
+> CSS ownership, per-mount state, auth policy, telemetry, portals, routes, copy,
+> and retained UI dependencies are product-neutral. Hosting guidance, template
+> maintenance/CI, and the final visual reference captures still remain before
+> publishing it as the finished GitHub template.
 
 ## Template lineage
 
@@ -95,10 +95,10 @@ or ASO-matching page-canvas values merely because they exist in shell CSS. The
 visual phase must record light/dark reference captures before accepting the
 snapshot.
 
-Reference captures are not yet recorded. The shell Playwright suite exists
-and targets the registered React demo; it does not close this visual gate.
-The visual snapshot gate remains open even though its source values and
-exclusions are fixed here.
+Reference captures are not yet recorded. Shell Playwright protects runtime and
+containment behavior, but it does not close this visual gate. The visual
+snapshot gate remains open even though its source values and exclusions are
+fixed here.
 
 ### Portal behavior
 
@@ -129,7 +129,7 @@ focus, and shell-containment behavior also receives a manual embedded proof.
 Product-domain tests and a cross-framework conformance framework are outside the
 starter repository.
 
-## Early integration gate status
+## Implementation status
 
 - PASS: source-controlled baseline copy and target repository identity.
 - PASS: frozen install, TypeScript, lint without errors, and production build.
@@ -165,24 +165,32 @@ starter repository.
   `requestSignOut()` delegates to the host without reading or clearing storage.
 - PASS: embedded render failures use host telemetry; standalone rendering keeps
   an explicit console fallback.
-- PASS: each mount renders one themed `[data-rmf-portal-root]`. Dialog and Sheet
-  enforce non-modal document behavior with slot-local overlays; Dropdown Menu,
-  Popover, and Tooltip use non-modal Radix portals; Select is a local accessible
-  listbox. All default to the mount-owned container and retained wrappers allow
-  a mount-local explicit override. The unused document-modal AlertDialog was removed.
+- PASS: each mount renders one themed `[data-rmf-portal-root]`. The final
+  retained Dialog, Dropdown Menu, and Tooltip use slot-local portals; Select is a local
+  accessible listbox. All default to the mount-owned container. Unreachable
+  Sheet, Popover, and AlertDialog implementations were removed.
   Sonner notifications are toaster-scoped and dismissed during provider cleanup.
-- PASS: 18 focused Vitest checks cover auth modes, independent mount sessions,
+- PASS: 20 focused Vitest checks cover auth modes, independent mount sessions,
   embedded-import ownership, route/nav projection, telemetry, portal
-  containment, theme inheritance, focus return, and cleanup.
-- PASS: the latest disposable Shell run against the updated starter passed all
-  11 Playwright scenarios, including theme/locale propagation, normal Select
+  containment, theme inheritance, focus return, cleanup, and the neutral
+  Patterns interaction surface.
+- PASS: the neutral-surface disposable Shell run passed 10 applicable
+  Playwright scenarios, including theme/locale propagation, normal Select
   close, forced route unmount with an open portal, and clean re-entry. The
-  temporary registration did not modify the Shell working tree.
+  removed crash scenario was intentionally skipped; no permanent starter
+  registration was added to the Shell.
+- PASS: the neutral surface contains only `overview` and optional `patterns`
+  routes with `en`, `ru`, and `es` labels. The standalone frame owns local
+  route navigation, locale selection, and light/dark switching; embedded mode
+  renders no duplicate chrome.
+- PASS: crash, protected request, technical runtime cards, copied form/pages,
+  demo translations, unreachable primitives, and eight demo-only packages were
+  removed. The artifact verifier rejects route drift and removed demo copy.
 - OPEN: light/dark reference captures for the visual snapshot.
 
-The repository is now an embedded-CSS-safe, mount-isolated baseline. It is not
-yet the finished template: the demo surface, visual curation, dependency
-reduction, and final publishing/maintenance work remain.
+The repository is now an embedded-CSS-safe, mount-isolated, neutral application
+baseline. It is not yet the finished template: final visual evidence, hosting,
+CI, and publishing/maintenance documentation remain.
 
 ## Current surfaces
 
@@ -199,11 +207,22 @@ reduction, and final publishing/maintenance work remain.
 | `src/app/styles/standalone.css`       | Standalone-only document ownership                  |
 | `vite-plugin-rmf-remote-css-layer.ts` | Embedded-only cascade-layer transform               |
 | `src/app/model/nav-manifest.ts`       | Current route/navigation source                     |
+| `src/pages/overview/`                 | Neutral initial application page                    |
+| `src/pages/patterns/`                 | Optional removable UI/reference page                |
 | `scripts/verify-artifacts.mjs`        | Federation, embedded CSS, and standalone layer gate |
 
-The copied crash, protected request, technical cards, and demo form are temporary
-baseline material. The neutral-application phase removes them and replaces the
-surface with overview and optional patterns routes.
+Once a product has its own UI patterns, remove the optional reference surface:
+
+1. delete `src/pages/patterns/`;
+2. remove its entry from `src/app/model/nav-manifest.ts` and mapping from
+   `src/app/model/page-element.ts`;
+3. remove `patterns` from the expected route list in
+   `src/app/model/nav-manifest.test.tsx` and from `expectedPages` in
+   `scripts/verify-artifacts.mjs`;
+4. remove now-unused `patterns` translations, primitives, and dependencies.
+
+`overview` remains the default empty-segment route and should be replaced with
+the first real product surface.
 
 ## Local development
 
