@@ -6,8 +6,8 @@ Standalone Vite + React application and Runtime MF remote baseline for
 > The repository has passed its neutral-application cut. Federation identity,
 > CSS ownership, per-mount state, auth policy, telemetry, portals, routes, copy,
 > and retained UI dependencies are product-neutral. Hosting guidance, template
-> maintenance/CI, and the final visual reference captures still remain before
-> publishing it as the finished GitHub template.
+> maintenance/CI, and publishing guidance still remain before publishing it as
+> the finished GitHub template.
 
 ## Template lineage
 
@@ -91,14 +91,13 @@ commit. Portal placement and embedded document ownership are deliberately
 overridden by the contract below. Shell chrome primitives are excluded.
 
 Do not copy shell navigation/header/account chrome, ASO compatibility selectors,
-or ASO-matching page-canvas values merely because they exist in shell CSS. The
-visual phase must record light/dark reference captures before accepting the
-snapshot.
+or ASO-matching page-canvas values merely because they exist in shell CSS.
 
-Reference captures are not yet recorded. Shell Playwright protects runtime and
-containment behavior, but it does not close this visual gate. The visual
-snapshot gate remains open even though its source values and exclusions are
-fixed here.
+The reviewed light/dark, standalone/embedded, dialog, and narrow-layout
+captures are recorded in the [visual reference](./docs/visual-reference/README.md).
+They close the initial visual-snapshot gate for the neutral starter surfaces.
+Shell Playwright continues to protect runtime and containment behavior rather
+than pixel appearance.
 
 ### Portal behavior
 
@@ -186,11 +185,15 @@ starter repository.
 - PASS: crash, protected request, technical runtime cards, copied form/pages,
   demo translations, unreachable primitives, and eight demo-only packages were
   removed. The artifact verifier rejects route drift and removed demo copy.
-- OPEN: light/dark reference captures for the visual snapshot.
+- PASS: reviewed light/dark, standalone/embedded, dialog, and narrow-layout
+  captures are recorded in the
+  [visual reference](./docs/visual-reference/README.md). Narrow grids respond to
+  the remote container width and remain single-column in a constrained Shell
+  slot.
 
 The repository is now an embedded-CSS-safe, mount-isolated, neutral application
-baseline. It is not yet the finished template: final visual evidence, hosting,
-CI, and publishing/maintenance documentation remain.
+baseline. It is not yet the finished template: hosting, CI, and
+publishing/maintenance documentation remain.
 
 ## Current surfaces
 
@@ -209,6 +212,7 @@ CI, and publishing/maintenance documentation remain.
 | `src/app/model/nav-manifest.ts`       | Current route/navigation source                     |
 | `src/pages/overview/`                 | Neutral initial application page                    |
 | `src/pages/patterns/`                 | Optional removable UI/reference page                |
+| `docs/visual-reference/`              | Approved initial visual snapshot and evidence       |
 | `scripts/verify-artifacts.mjs`        | Federation, embedded CSS, and standalone layer gate |
 
 Once a product has its own UI patterns, remove the optional reference surface:

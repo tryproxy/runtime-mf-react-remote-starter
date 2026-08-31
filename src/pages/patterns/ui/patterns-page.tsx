@@ -70,7 +70,7 @@ export function PatternsPage() {
   };
 
   return (
-    <section className="space-y-6">
+    <section className="@container/page space-y-6">
       <header className="space-y-2">
         <p className="text-muted-foreground text-sm font-medium">
           {t('patterns.eyebrow')}
@@ -89,7 +89,7 @@ export function PatternsPage() {
         <AlertDescription>{t('patterns.optionalDescription')}</AlertDescription>
       </Alert>
 
-      <div className="wideMobile:grid-cols-2 grid gap-4">
+      <div className="grid gap-4 @3xl/page:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>{t('patterns.form.title')}</CardTitle>
@@ -210,7 +210,7 @@ export function PatternsPage() {
           <CardTitle>{t('patterns.status.title')}</CardTitle>
           <CardDescription>{t('patterns.status.description')}</CardDescription>
         </CardHeader>
-        <CardContent className="wideMobile:grid-cols-3 grid gap-3">
+        <CardContent className="grid gap-3 @2xl/page:grid-cols-2 @5xl/page:grid-cols-3">
           <Alert>
             <CircleDashedIcon />
             <AlertTitle>{t('patterns.status.emptyTitle')}</AlertTitle>

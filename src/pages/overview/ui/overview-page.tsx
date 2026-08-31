@@ -15,7 +15,7 @@ export function OverviewPage() {
   const { t } = useTranslation();
 
   return (
-    <section className="space-y-6">
+    <section className="@container/page space-y-6">
       <header className="space-y-2">
         <p className="text-muted-foreground text-sm font-medium">
           {t('overview.eyebrow')}
@@ -34,7 +34,7 @@ export function OverviewPage() {
         <AlertDescription>{t('overview.readyDescription')}</AlertDescription>
       </Alert>
 
-      <div className="wideMobile:grid-cols-3 grid gap-4">
+      <div className="grid gap-4 @3xl/page:grid-cols-2 @5xl/page:grid-cols-3">
         {(['start', 'integrate', 'ship'] as const).map((item) => (
           <Card key={item} size="sm">
             <CardHeader>
