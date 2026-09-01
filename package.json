@@ -15,6 +15,7 @@
     "verify:artifacts": "node scripts/verify-artifacts.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
+    "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "prepare": "husky"
   },
