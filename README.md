@@ -262,12 +262,18 @@ the first real product surface.
 
 Requirements:
 
-- Node `22.12.0` is recorded in `.node-version`;
-- `package.json` also accepts the Vite-supported Node 20 line;
-- pnpm is pinned through the `packageManager` field.
+- Node `22.12.0` is recorded in `.node-version` (pnpm 11 needs Node 22+);
+- pnpm `11.25.0` is pinned through the `packageManager` field (Corepack).
+
+Everyday local install can be `pnpm install`. Use `pnpm ci` for a clean,
+lockfile-frozen install (CI and a fresh clone). GitHub-hosted contract and
+adapters packages are listed in `pnpm-workspace.yaml` `allowBuilds`; update
+those git-tarball keys if you bump the tags. If a cold Corepack install cannot
+prepare those git packages (they still pin pnpm 10), use a standalone pnpm 11
+binary or `pnpm/action-setup` so the git prepare can switch versions.
 
 ```bash
-pnpm install --frozen-lockfile
+pnpm ci
 pnpm dev
 pnpm test
 pnpm build

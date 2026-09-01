@@ -1,0 +1,8 @@
+# pnpm 11 project config (this is not a multi-package workspace).
+# Git-hosted contract/adapters run `prepare` to emit dist. Repo URLs
+# (no commit) cover every tag from these repositories.
+allowBuilds:
+  '@platform/runtime-mf-adapters@git+https://github.com/tryproxy/runtime-mf-adapters.git': true
+  '@platform/runtime-mf-contract@git+https://github.com/tryproxy/runtime-mf-contract.git': true
+  '@tailwindcss/oxide': true
+  esbuild: true
