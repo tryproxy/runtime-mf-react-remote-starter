@@ -12,7 +12,7 @@ the immutable record; `main` can move.
 | React / ReactDOM                | `^19.1.1`                                                              |
 | Vite                            | `^7.1.2`                                                               |
 | Tailwind CSS                    | `^4.1.12`                                                              |
-| Node.js                         | `>=22.12.0` (`.node-version` `22.12.0`)                                |
+| Node.js                         | `>=22.13.0` (`.node-version` `22.13.0`)                                |
 | pnpm                            | `11.25.0`                                                              |
 
 ## Pin policy

@@ -19,8 +19,8 @@ commits. See [Maintenance](#maintenance).
 
 ## Prerequisites
 
-- Node `22.12.0` or newer (`.node-version` records `22.12.0`; `engines` is
-  `>=22.12.0`)
+- Node `22.13.0` or newer (`.node-version` records `22.13.0`; `engines` is
+  `>=22.13.0`)
 - pnpm `11.25.0` via Corepack (`packageManager` in `package.json`)
 
 ```bash
@@ -275,7 +275,7 @@ Playwright lives in the shell, not here.
 | React               | `^19.1.1`                                    |
 | Vite                | `^7.1.2`                                     |
 | Tailwind            | `^4.1.12`                                    |
-| Node                | `>=22.12.0`                                  |
+| Node                | `>=22.13.0`                                  |
 | pnpm                | `11.25.0`                                    |
 
 Never pin those git packages to `latest` or a floating branch. Use a tag
