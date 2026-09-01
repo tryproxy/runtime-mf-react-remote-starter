@@ -66,7 +66,7 @@ export const en = {
       menuLabel: 'Example actions',
       success: 'Success',
       info: 'Information',
-      tooltip: 'Show hint',
+      hintToggle: 'Show hint',
       hint: 'Helpful context belongs close to the action.',
       toast: 'Show toast',
     },

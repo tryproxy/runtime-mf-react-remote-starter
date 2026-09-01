@@ -1,6 +1,7 @@
 /** Retained shadcn/ui primitives used by the neutral starter surface. */
 export { Alert, AlertAction, AlertDescription, AlertTitle } from './alert';
-export { Button, buttonVariants } from './button';
+export { Button } from './button';
+export { buttonVariants } from './button-variants';
 export {
   Card,
   CardAction,

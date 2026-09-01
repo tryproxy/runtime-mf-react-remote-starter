@@ -101,6 +101,58 @@ describe('RemotePortalProvider', () => {
     );
   });
 
+  it('aligns Select content to the final trigger width on first open', async () => {
+    const offsetWidth = vi
+      .spyOn(HTMLElement.prototype, 'offsetWidth', 'get')
+      .mockImplementation(function measureOffsetWidth(this: HTMLElement) {
+        if (this.dataset.slot === 'select-content') {
+          return Number.parseFloat(this.style.minWidth) || 144;
+        }
+
+        return 0;
+      });
+    const { container } = render(
+      <div data-rmf-root="">
+        <RemotePortalProvider theme="light">
+          <Select>
+            <SelectTrigger aria-label="State">
+              <SelectValue placeholder="Choose a state" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="ready">Ready</SelectItem>
+            </SelectContent>
+          </Select>
+        </RemotePortalProvider>
+      </div>
+    );
+    const trigger = within(container).getByRole('combobox', {
+      name: 'State',
+    });
+    const portalRoot = container.querySelector<HTMLElement>(
+      '[data-rmf-portal-root]'
+    );
+
+    trigger.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 100, y: 40, width: 300, height: 32 });
+    if (!portalRoot) {
+      throw new Error('Expected a remote portal root.');
+    }
+    portalRoot.getBoundingClientRect = () =>
+      DOMRect.fromRect({ x: 0, y: 0, width: 800, height: 600 });
+
+    fireEvent.click(trigger);
+    const listbox = await within(portalRoot).findByRole('listbox');
+
+    await waitFor(() => {
+      expect(listbox.style.minWidth).toBe('300px');
+      expect(listbox.style.left).toBe('100px');
+      expect(listbox.style.top).toBe('76px');
+    });
+
+    offsetWidth.mockRestore();
+  });
+
   it('rejects a portal override outside the remote mount', () => {
     const consoleError = vi
       .spyOn(console, 'error')

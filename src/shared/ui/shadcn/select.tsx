@@ -205,7 +205,7 @@ function SelectTrigger({
       data-placeholder={context.value === undefined ? '' : undefined}
       disabled={context.disabled || disabled}
       className={cn(
-        "border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 flex w-fit items-center justify-between gap-1.5 rounded-lg border bg-transparent py-2 pr-2 pl-2.5 text-sm whitespace-nowrap transition-colors outline-none select-none focus-visible:ring-3 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-3 data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 flex w-fit items-center justify-between gap-1.5 rounded-lg border bg-transparent py-2 pr-2 pl-2.5 text-sm whitespace-nowrap outline-none select-none focus-visible:ring-3 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-3 data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-1.5 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       onClick={(event) => {
@@ -260,13 +260,15 @@ function SelectContent({
 
   const updatePosition = React.useCallback(() => {
     const trigger = context.trigger;
-    if (!trigger) {
+    const content = contentRef.current;
+    if (!trigger || !content) {
       return;
     }
 
     const triggerRect = trigger.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
-    const contentWidth = contentRef.current?.offsetWidth ?? triggerRect.width;
+    content.style.minWidth = `${triggerRect.width}px`;
+    const contentWidth = content.offsetWidth || triggerRect.width;
     const left =
       align === 'start'
         ? triggerRect.left
@@ -274,11 +276,18 @@ function SelectContent({
           ? triggerRect.right - contentWidth
           : triggerRect.left + (triggerRect.width - contentWidth) / 2;
 
-    setPositionStyle({
+    const nextStyle = {
       left: left - containerRect.left,
       minWidth: triggerRect.width,
       top: triggerRect.bottom - containerRect.top + sideOffset,
-    });
+    };
+    setPositionStyle((currentStyle) =>
+      currentStyle.left === nextStyle.left &&
+      currentStyle.minWidth === nextStyle.minWidth &&
+      currentStyle.top === nextStyle.top
+        ? currentStyle
+        : nextStyle
+    );
   }, [align, container, context.trigger, sideOffset]);
 
   React.useLayoutEffect(() => {
@@ -289,12 +298,23 @@ function SelectContent({
     updatePosition();
     window.addEventListener('resize', updatePosition);
     window.addEventListener('scroll', updatePosition, true);
+    const resizeObserver =
+      typeof ResizeObserver === 'undefined'
+        ? null
+        : new ResizeObserver(updatePosition);
+    if (context.trigger) {
+      resizeObserver?.observe(context.trigger);
+    }
+    if (contentRef.current) {
+      resizeObserver?.observe(contentRef.current);
+    }
 
     return () => {
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition, true);
+      resizeObserver?.disconnect();
     };
-  }, [context.open, updatePosition]);
+  }, [context.open, context.trigger, updatePosition]);
 
   React.useEffect(() => {
     if (!context.open) {
@@ -376,7 +396,7 @@ function SelectContent({
       data-slot="select-content"
       data-align-trigger={position === 'item-aligned'}
       className={cn(
-        'bg-popover text-popover-foreground ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 pointer-events-auto absolute z-50 max-h-72 min-w-36 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-md ring-1 duration-100',
+        'bg-popover text-popover-foreground ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 pointer-events-auto absolute z-50 max-h-72 min-w-36 overflow-x-hidden overflow-y-auto rounded-lg p-1 shadow-md ring-1 transition-none duration-100 motion-reduce:animate-none',
         position === 'popper' && 'w-max',
         className
       )}

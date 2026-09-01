@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { ModuleTheme } from '@/shared/lib';
-
-const RemotePortalContext = createContext<HTMLElement | null>(null);
+import { RemotePortalContext } from './remote-portal-context';
 
 type RemotePortalProviderProps = {
   children: ReactNode;
@@ -30,30 +29,4 @@ export function RemotePortalProvider({
       {portalRoot ? children : null}
     </RemotePortalContext.Provider>
   );
-}
-
-/** Resolve a portal target without allowing content to escape the mount. */
-export function useRemotePortalContainer(
-  explicitContainer?: HTMLElement
-): HTMLElement {
-  const container = useContext(RemotePortalContext);
-
-  if (!container) {
-    throw new Error(
-      'Remote portal components must be rendered inside RemotePortalProvider.'
-    );
-  }
-
-  if (!explicitContainer) {
-    return container;
-  }
-
-  const remoteRoot = container.closest<HTMLElement>('[data-rmf-root]');
-  if (!remoteRoot?.contains(explicitContainer)) {
-    throw new Error(
-      'A remote portal container override must stay below [data-rmf-root].'
-    );
-  }
-
-  return explicitContainer;
 }

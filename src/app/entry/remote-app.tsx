@@ -6,7 +6,7 @@ import {
   useBridgeTheme,
 } from '@/shared/lib';
 import type { HostBridge } from '@platform/runtime-mf-contract';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { RemotePortalProvider } from '@/shared/ui/remote-portal';
 import { RemoteToastProvider } from '@/shared/ui/remote-toast';
@@ -24,7 +24,7 @@ export function RemoteApp({ bridge, basename, container }: RemoteAppProps) {
   const locale = useBridgeLocale(bridge, i18n);
   const theme = useBridgeTheme(bridge);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!container) {
       return;
     }

@@ -1,35 +1,10 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  type ReactNode,
-} from 'react';
+import { useEffect, useId, useMemo, useRef, type ReactNode } from 'react';
 import { toast, type ExternalToast } from 'sonner';
-
-type ToastMessage = Parameters<typeof toast.success>[0];
-type ToastId = string | number;
-type RemoteToastMethod = (
-  message: ToastMessage,
-  options?: ExternalToast
-) => ToastId;
-
-export type RemoteToast = {
-  success: RemoteToastMethod;
-  info: RemoteToastMethod;
-  warning: RemoteToastMethod;
-  error: RemoteToastMethod;
-  dismiss(id?: ToastId): void;
-};
-
-type RemoteToastSession = {
-  toasterId: string;
-  api: RemoteToast;
-};
-
-const RemoteToastContext = createContext<RemoteToastSession | null>(null);
+import {
+  RemoteToastContext,
+  type RemoteToast,
+  type ToastId,
+} from './remote-toast-context';
 
 type RemoteToastProviderProps = {
   children: ReactNode;
@@ -87,24 +62,4 @@ export function RemoteToastProvider({ children }: RemoteToastProviderProps) {
       {children}
     </RemoteToastContext.Provider>
   );
-}
-
-function useRemoteToastSession(): RemoteToastSession {
-  const session = useContext(RemoteToastContext);
-
-  if (!session) {
-    throw new Error(
-      'Remote toast components must be rendered inside RemoteToastProvider.'
-    );
-  }
-
-  return session;
-}
-
-export function useRemoteToast(): RemoteToast {
-  return useRemoteToastSession().api;
-}
-
-export function useRemoteToasterId(): string {
-  return useRemoteToastSession().toasterId;
 }

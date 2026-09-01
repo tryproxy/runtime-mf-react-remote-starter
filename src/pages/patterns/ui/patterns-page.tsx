@@ -188,7 +188,7 @@ export function PatternsPage() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button type="button" variant="secondary">
-                  {t('patterns.actions.tooltip')}
+                  {t('patterns.actions.hintToggle')}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>{t('patterns.actions.hint')}</TooltipContent>

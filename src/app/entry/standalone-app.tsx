@@ -5,7 +5,7 @@ import { applyModuleTheme, HostBridgeProvider } from '@/shared/lib';
 import { RemotePortalProvider } from '@/shared/ui/remote-portal';
 import { RemoteToastProvider } from '@/shared/ui/remote-toast';
 import { createMockHostBridge } from '@platform/runtime-mf-contract';
-import { useEffect, useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useState } from 'react';
 import type { i18n as I18nInstance } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 
@@ -28,7 +28,7 @@ export function StandaloneApp({
     [locale, theme]
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     applyModuleTheme(theme, document.documentElement);
     applyModuleTheme(theme, rootElement);
   }, [rootElement, theme]);

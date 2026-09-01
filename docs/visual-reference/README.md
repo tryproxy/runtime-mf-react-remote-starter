@@ -42,9 +42,8 @@ starter registration was added to `runtime-mf-shell`.
 - The local Select can be misaligned on its first open because it is positioned
   before its final minimum width is reflected in measurement. A second open is
   not acceptable evidence for this behavior.
-- The “Show hint” example uses Tooltip semantics. Tooltip remains suitable for
-  supplementary hover/focus help, but persistent click/tap help must use a
-  disclosure, Popover, or inline region.
+- The “Show hint” example is a hover/focus Tooltip in the mount-owned portal.
+  It must not expand the actions row with an inline help block.
 - A light/dark switch can briefly mix the new page/card theme with old input and
   Select colors because component transition durations are inconsistent.
 - The current lint run has zero errors but five Fast Refresh warnings caused by

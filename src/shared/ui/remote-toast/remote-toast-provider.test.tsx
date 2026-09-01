@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { toast } from 'sonner';
 import { describe, expect, it, vi } from 'vitest';
-import { RemoteToastProvider, useRemoteToast } from './remote-toast-provider';
+import { RemoteToastProvider, useRemoteToast } from '.';
 
 vi.mock('sonner', () => ({
   toast: {

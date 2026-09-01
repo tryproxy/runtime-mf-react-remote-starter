@@ -60,9 +60,9 @@ The candidate visual source is `runtime-mf-shell` commit
 the following reviewed subset, not the complete shell stylesheet:
 
 - Geist Variable as `--font-sans` and `--font-heading`;
-- Tailwind v4 default spacing and standard `sm`/`md`/`lg`/`xl` breakpoints;
-- custom breakpoints `compact: 500px`, `comfortable: 560px`, and
-  `wideMobile: 740px`;
+- Tailwind v4 default spacing and standard viewport breakpoints;
+- no copied Shell/ASO custom viewport breakpoints; embedded page composition
+  uses named container queries instead;
 - radius `0.625rem`, with the current shadcn derived radius scale;
 - focus treatment `outline-ring/50` and the semantic ring values below;
 - `--rmf-color-page`, `surface`, `fg`, `muted`, `subtle`, `border`,
@@ -97,9 +97,9 @@ The reviewed light/dark, standalone/embedded, dialog, and narrow-layout
 captures are recorded in the [visual reference](./docs/visual-reference/README.md).
 They close the initial appearance snapshot only. The
 [style guide](./docs/style-guide.md) records the responsive and interaction
-contract plus the Select, touch-help, theme-transition, Fast Refresh, and
-breakpoint-policy gaps that remain open. Shell Playwright continues to protect
-runtime and containment behavior rather than pixel appearance.
+contract plus the verified Select, persistent-help, atomic-theme, Fast Refresh,
+and breakpoint-policy gates. Shell Playwright continues to protect runtime and
+containment behavior rather than pixel appearance.
 
 ### Portal behavior
 
@@ -133,9 +133,8 @@ starter repository.
 ## Implementation status
 
 - PASS: source-controlled baseline copy and target repository identity.
-- PASS: frozen install, TypeScript, lint with zero errors, and production build.
-  Five Fast Refresh warnings remain and are tracked as `DX-001` in the style
-  guide.
+- PASS: frozen install, TypeScript, lint with zero warnings/errors, and
+  production build.
 - PASS: federation identity, `./mount`, `nav.json`, assets, and empty shared list.
 - PASS: standalone document CSS is isolated in `standalone.css`; the embedded
   graph omits Tailwind Preflight and scopes semantic/base rules to
@@ -173,7 +172,7 @@ starter repository.
   accessible listbox. All default to the mount-owned container. Unreachable
   Sheet, Popover, and AlertDialog implementations were removed.
   Sonner notifications are toaster-scoped and dismissed during provider cleanup.
-- PASS: 20 focused Vitest checks cover auth modes, independent mount sessions,
+- PASS: 22 focused Vitest checks cover auth modes, independent mount sessions,
   embedded-import ownership, route/nav projection, telemetry, portal
   containment, theme inheritance, focus return, cleanup, and the neutral
   Patterns interaction surface.
@@ -194,28 +193,36 @@ starter repository.
   [visual reference](./docs/visual-reference/README.md). Narrow grids respond to
   the remote container width and remain single-column in a constrained Shell
   slot.
+- PASS: `UI-001`–`UI-003`, `DX-001`, and `ARC-001` are closed. Select measures
+  its final width before alignment and observes size/scroll/resize changes;
+  “Show hint” is a hover tooltip; semantic theme colors switch without
+  transition lag; component modules are Fast Refresh-safe; and copied custom
+  breakpoint declarations are gone.
+- PASS: the Shell-owned optional starter profile passes five Chromium checks:
+  first-open Select geometry at desktop/compact widths plus resize/scroll,
+  hover tooltip help without layout shift, and atomic theme sampling
+  with normal and reduced motion.
 
 The repository is now an embedded-CSS-safe, mount-isolated, neutral application
-baseline. It is not yet the finished template: hosting, CI, and
-publishing/maintenance documentation remain. The interaction and development
-quality gaps listed below also block template publication.
+baseline. It is not yet the finished template: hosting, CI, rename,
+compatibility, and publishing/maintenance documentation remain.
 
-### Known quality gaps
+### Closed WP6.1 quality gates
 
-- `UI-001`: the local Select can be horizontally offset on its first open
-  because positioning is calculated before its final width is applied;
-- `UI-002`: the “Show hint” example uses hover/focus Tooltip behavior even
-  though its label implies persistent click/tap behavior;
-- `UI-003`: semantic color transitions produce a visible mixed-theme frame on
-  control-heavy pages;
-- `DX-001`: five component modules trigger
-  `react-refresh/only-export-components` warnings;
-- `ARC-001`: company breakpoint values are duplicated across repositories and
-  the starter's custom `px` variants share a Tailwind scale whose defaults use
-  `rem`.
+- `UI-001`: closed by final-width measurement, `ResizeObserver`, scroll/resize
+  repositioning, unit regression, and Shell-owned desktop/compact browser proof.
+- `UI-002`: closed by a portal Tooltip on “Show hint”; help appears on
+  hover/focus and does not insert an inline block into the actions row.
+- `UI-003`: closed by layout-boundary theme application, external-store theme
+  subscription, and removal of semantic `all`/color transitions, including
+  portals and reduced-motion browser proof.
+- `DX-001`: closed by splitting hooks, contexts, and variants from component
+  modules; lint now has zero warnings and zero errors.
+- `ARC-001`: closed by removing the three unused custom breakpoint declarations.
+  Tailwind defaults and named container queries remain the policy.
 
 Fix and verification expectations are defined in the
-[style guide](./docs/style-guide.md#known-issues-and-required-closure).
+[style guide](./docs/style-guide.md#closed-wp61-quality-gates).
 
 ## Current surfaces
 

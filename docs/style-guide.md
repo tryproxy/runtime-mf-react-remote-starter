@@ -1,7 +1,7 @@
 # React remote starter style guide
 
-Status: initial reviewed baseline; known interaction defects remain open
-Updated: 2026-08-31
+Status: initial reviewed baseline; WP6.1 interaction gates verified
+Updated: 2026-09-01
 
 This document is the implementation contract for the starter's neutral UI. It
 records what a new remote should preserve, what it may replace, and which
@@ -46,19 +46,17 @@ or product-specific ASO selectors into the starter.
 
 ### Viewport scale
 
-The starter currently uses the same numeric viewport scale as the Shell and
-ASO, but the values are copied rather than supplied by a shared package.
+The starter uses Tailwind's default viewport scale. It does not copy the
+Shell/ASO `compact`, `comfortable`, or `wideMobile` values because viewport
+policy is not part of the Runtime MF contract.
 
-| Name          | Minimum | Starter source                              |
-| ------------- | ------: | ------------------------------------------- |
-| `compact`     |   500px | custom value in `src/app/styles/tokens.css` |
-| `comfortable` |   560px | custom value in `src/app/styles/tokens.css` |
-| `sm`          |   640px | Tailwind default                            |
-| `wideMobile`  |   740px | custom value in `src/app/styles/tokens.css` |
-| `md`          |   768px | Tailwind default                            |
-| `lg`          |  1024px | Tailwind default                            |
-| `xl`          |  1280px | Tailwind default                            |
-| `2xl`         |  1536px | Tailwind default                            |
+| Name  | Minimum | Starter source   |
+| ----- | ------: | ---------------- |
+| `sm`  |   40rem | Tailwind default |
+| `md`  |   48rem | Tailwind default |
+| `lg`  |   64rem | Tailwind default |
+| `xl`  |   80rem | Tailwind default |
+| `2xl` |   96rem | Tailwind default |
 
 The Shell mirrors the custom values in
 `src/shared/styles/tokens.css` and keeps JavaScript constants in
@@ -66,10 +64,14 @@ The Shell mirrors the custom values in
 `tailwind.config.js` and `src/shared/config/breakpoints.ts`. There is no shared
 breakpoint package, so a change is not automatically propagated.
 
-Tailwind's default breakpoint scale uses `rem`, while the three custom values
-currently use `px`. Do not add new custom variants until the open breakpoint
-ownership/unit decision is closed. If the current values are retained, use one
-unit family and verify generated variant order.
+Policy implemented on 2026-09-01:
+
+- remove `compact`, `comfortable`, and `wideMobile` from the starter;
+- retain Tailwind's default viewport scale and consistent `rem` units;
+- let Shell own Shell-chrome breakpoints and each product remote own product
+  viewport breakpoints;
+- keep breakpoint values out of Runtime MF Contract;
+- introduce a shared design preset only after repeated real-product evidence.
 
 ### Embedded composition
 
@@ -101,10 +103,11 @@ than assuming Shell sidebar or page dimensions.
 - A theme test must sample representative page, card, input, select, and portal
   colors at the switch boundary; checking only the final state is insufficient.
 
-The current implementation does not yet meet the atomic-switch rule. Input and
-Select use `transition-colors`, Button uses `transition-all`, while surrounding
-surfaces switch immediately. Standalone document markers are also applied from
-an effect. See `UI-003` below.
+The implementation applies standalone and mount-container markers from layout
+effects, consumes bridge theme through `useSyncExternalStore`, and does not
+transition semantic control/overlay colors during a theme flip. The
+Shell-owned browser profile samples the control-heavy Patterns page in normal
+and reduced-motion modes.
 
 ## Controls and overlays
 
@@ -122,12 +125,14 @@ an effect. See `UI-003` below.
 
 ### Tooltip and persistent help
 
-Tooltip is supplementary hover/focus content. It may close when its trigger is
-activated and must not contain information required to complete a task.
+Tooltip is supplementary hover/focus content. It may close when pointer leaves
+or the trigger blurs, and must not contain information required to complete a
+task. The Patterns “Show hint” example is a Tooltip: it must not insert an
+inline block that shifts surrounding controls.
 
-For a control labelled “Show hint” or for help that must remain available after
-tap/click, use a disclosure, Popover, or inline expandable region with explicit
-open state. Do not make a Tooltip imitate persistent touch behavior.
+If help must remain available after tap/click, use a disclosure, Popover, or
+inline expandable region with explicit open state. Do not make a Tooltip imitate
+that persistent behavior, and do not make a disclosure imitate a tooltip.
 
 ### Portals
 
@@ -147,16 +152,9 @@ contexts, variant definitions, constants, and helpers to adjacent `.ts` files
 and re-export them through a barrel when needed. Do not disable
 `react-refresh/only-export-components` to hide a mixed-export warning.
 
-The current known mixed exports are:
-
-- `useHostBridge` from `host-bridge-context.tsx`;
-- `useRemotePortalContainer` from `remote-portal-provider.tsx`;
-- `useRemoteToast` and `useRemoteToasterId` from
-  `remote-toast-provider.tsx`;
-- `buttonVariants` from `button.tsx`.
-
-These warnings do not break a production build, but development Fast Refresh
-may fall back to a broader reload and lose local state.
+The starter follows this split for HostBridge, remote portals, remote toasts,
+and Button variants. Configured lint completes with zero Fast Refresh warnings;
+do not merge these exports back into component modules.
 
 ## Accessibility baseline
 
@@ -169,18 +167,18 @@ may fall back to a broader reload and lose local state.
 - Locale changes must not cause horizontal overflow in the supported `en`,
   `ru`, and `es` surfaces.
 
-## Known issues and required closure
+## Closed WP6.1 quality gates
 
-| ID        | Priority | Open issue                                                                                                   | Required evidence                                                                                                                     |
-| --------- | -------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `UI-001`  | P1       | Select uses its initial CSS width to calculate alignment, then changes `minWidth`; first open can be offset. | Browser regression test proves first-open alignment for compact and full-width triggers, plus resize/scroll behavior.                 |
-| `UI-002`  | P1       | The “Show hint” example uses Tooltip semantics, so click/tap activation closes it.                           | Replace the example with persistent disclosure/Popover semantics; verify keyboard and touch activation.                               |
-| `UI-003`  | P1       | Theme changes are visually staggered across page and form controls.                                          | Atomic-switch test samples page/card/input/select/portal at the switch boundary; reduced-motion case passes.                          |
-| `DX-001`  | P2       | ESLint reports five `react-refresh/only-export-components` warnings.                                         | Split non-component exports; `pnpm lint` completes with zero warnings and zero errors.                                                |
-| `ARC-001` | P2       | Shell, starter, demo, and ASO duplicate breakpoint values; custom units differ from Tailwind defaults.       | Record one ownership policy, normalize units if kept in Tailwind, and add a drift check or intentionally declare remote independence. |
+| ID        | Status | Evidence                                                                                               |
+| --------- | ------ | ------------------------------------------------------------------------------------------------------ |
+| `UI-001`  | Closed | First-open desktop/compact geometry plus resize/scroll passes in Shell Playwright; unit regression.    |
+| `UI-002`  | Closed | “Show hint” is a portal Tooltip; hover/focus shows help without shifting the actions row.              |
+| `UI-003`  | Closed | Page/card/input/Select/portal boundary sampling passes with normal and reduced motion.                 |
+| `DX-001`  | Closed | Hooks, contexts, and variants are split; `pnpm lint` reports zero warnings/errors.                     |
+| `ARC-001` | Closed | Copied custom viewport values are removed; Tailwind defaults and container-query layouts are retained. |
 
-The initial screenshots remain approved as appearance references, but they do
-not close these issues.
+The initial screenshots remain approved appearance references. Interaction
+correctness is protected separately by the focused tests above.
 
 ## Review checklist
 

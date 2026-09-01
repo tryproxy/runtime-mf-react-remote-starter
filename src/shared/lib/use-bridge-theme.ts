@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import type { ModuleTheme } from './apply-module-theme';
 
 type ThemeHostBridge = {
@@ -10,16 +10,14 @@ type ThemeHostBridge = {
 
 /** Subscribe to the shell theme without mutating the shell document. */
 export function useBridgeTheme(bridge: ThemeHostBridge): ModuleTheme {
-  const [theme, setTheme] = useState(() => bridge.theme.getSnapshot().mode);
+  const getSnapshot = useCallback(
+    () => bridge.theme.getSnapshot().mode,
+    [bridge]
+  );
+  const subscribe = useCallback(
+    (listener: () => void) => bridge.theme.subscribe(listener),
+    [bridge]
+  );
 
-  useEffect(() => {
-    const apply = () => {
-      setTheme(bridge.theme.getSnapshot().mode);
-    };
-
-    apply();
-    return bridge.theme.subscribe(apply);
-  }, [bridge]);
-
-  return theme;
+  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 }

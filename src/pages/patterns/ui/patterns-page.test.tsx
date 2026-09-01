@@ -27,6 +27,31 @@ function renderPatternsPage() {
 }
 
 describe('PatternsPage', () => {
+  it('shows action help as a hover tooltip without shifting layout', () => {
+    const { container } = renderPatternsPage();
+    const page = within(container);
+    const hintButton = page.getByRole('button', { name: 'Show hint' });
+    const actions = hintButton.closest('[data-slot="card-content"]');
+
+    expect(actions).toBeTruthy();
+    expect(hintButton.closest('[data-slot="tooltip-trigger"]')).toBeTruthy();
+    expect(hintButton.getAttribute('aria-expanded')).toBeNull();
+    expect(
+      actions?.textContent?.includes(
+        'Helpful context belongs close to the action.'
+      )
+    ).toBe(false);
+
+    fireEvent.click(hintButton);
+
+    expect(hintButton.getAttribute('aria-expanded')).toBeNull();
+    expect(
+      actions?.textContent?.includes(
+        'Helpful context belongs close to the action.'
+      )
+    ).toBe(false);
+  });
+
   it('submits the neutral example form and opens the local dialog', async () => {
     const { container } = renderPatternsPage();
 

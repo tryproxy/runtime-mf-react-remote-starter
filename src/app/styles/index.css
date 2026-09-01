@@ -126,3 +126,12 @@
     text-decoration: none;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  :where([data-rmf-root]),
+  :where([data-rmf-root]) * {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+  }
+}
