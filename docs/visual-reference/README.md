@@ -1,8 +1,9 @@
 # Visual reference
 
 Captured on 2026-08-31 from the starter production build. These images close
-the initial visual-snapshot gate for the neutral `overview` and optional
-`patterns` surfaces.
+the initial appearance snapshot for the neutral `overview` and optional
+`patterns` surfaces. They are not interaction acceptance tests; the normative
+rules and open defects live in the [starter style guide](../style-guide.md).
 
 The standalone captures came from the production preview on `:5004`. Embedded
 captures used a disposable local Shell registration on `:5000`; no permanent
@@ -35,6 +36,23 @@ starter registration was added to `runtime-mf-shell`.
   `[data-rmf-portal-root]` and do not change document-body overflow;
 - normal overlay close returns focus to the trigger, and keyboard focus uses
   the approved semantic ring.
+
+## Interaction limitations found after capture
+
+- The local Select can be misaligned on its first open because it is positioned
+  before its final minimum width is reflected in measurement. A second open is
+  not acceptable evidence for this behavior.
+- The “Show hint” example uses Tooltip semantics. Tooltip remains suitable for
+  supplementary hover/focus help, but persistent click/tap help must use a
+  disclosure, Popover, or inline region.
+- A light/dark switch can briefly mix the new page/card theme with old input and
+  Select colors because component transition durations are inconsistent.
+- The current lint run has zero errors but five Fast Refresh warnings caused by
+  component files that also export hooks or variants.
+
+These items are tracked as `UI-001` through `UI-003` and `DX-001` in the style
+guide. Refresh the affected captures only after the fixes are verified; do not
+replace the current images merely to hide a behavioral defect.
 
 ## Environment note
 

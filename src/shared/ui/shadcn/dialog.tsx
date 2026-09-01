@@ -78,7 +78,7 @@ function DialogContent({
       >
         {children}
         {showCloseButton && (
-          <DialogPrimitive.Close data-slot="dialog-close" asChild>
+          <DialogPrimitive.Close asChild data-slot="dialog-close">
             <Button
               variant="ghost"
               className="absolute top-2 right-2"

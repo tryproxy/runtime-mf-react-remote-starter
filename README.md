@@ -95,9 +95,11 @@ or ASO-matching page-canvas values merely because they exist in shell CSS.
 
 The reviewed light/dark, standalone/embedded, dialog, and narrow-layout
 captures are recorded in the [visual reference](./docs/visual-reference/README.md).
-They close the initial visual-snapshot gate for the neutral starter surfaces.
-Shell Playwright continues to protect runtime and containment behavior rather
-than pixel appearance.
+They close the initial appearance snapshot only. The
+[style guide](./docs/style-guide.md) records the responsive and interaction
+contract plus the Select, touch-help, theme-transition, Fast Refresh, and
+breakpoint-policy gaps that remain open. Shell Playwright continues to protect
+runtime and containment behavior rather than pixel appearance.
 
 ### Portal behavior
 
@@ -131,7 +133,9 @@ starter repository.
 ## Implementation status
 
 - PASS: source-controlled baseline copy and target repository identity.
-- PASS: frozen install, TypeScript, lint without errors, and production build.
+- PASS: frozen install, TypeScript, lint with zero errors, and production build.
+  Five Fast Refresh warnings remain and are tracked as `DX-001` in the style
+  guide.
 - PASS: federation identity, `./mount`, `nav.json`, assets, and empty shared list.
 - PASS: standalone document CSS is isolated in `standalone.css`; the embedded
   graph omits Tailwind Preflight and scopes semantic/base rules to
@@ -193,7 +197,25 @@ starter repository.
 
 The repository is now an embedded-CSS-safe, mount-isolated, neutral application
 baseline. It is not yet the finished template: hosting, CI, and
-publishing/maintenance documentation remain.
+publishing/maintenance documentation remain. The interaction and development
+quality gaps listed below also block template publication.
+
+### Known quality gaps
+
+- `UI-001`: the local Select can be horizontally offset on its first open
+  because positioning is calculated before its final width is applied;
+- `UI-002`: the “Show hint” example uses hover/focus Tooltip behavior even
+  though its label implies persistent click/tap behavior;
+- `UI-003`: semantic color transitions produce a visible mixed-theme frame on
+  control-heavy pages;
+- `DX-001`: five component modules trigger
+  `react-refresh/only-export-components` warnings;
+- `ARC-001`: company breakpoint values are duplicated across repositories and
+  the starter's custom `px` variants share a Tailwind scale whose defaults use
+  `rem`.
+
+Fix and verification expectations are defined in the
+[style guide](./docs/style-guide.md#known-issues-and-required-closure).
 
 ## Current surfaces
 
@@ -212,6 +234,7 @@ publishing/maintenance documentation remain.
 | `src/app/model/nav-manifest.ts`       | Current route/navigation source                     |
 | `src/pages/overview/`                 | Neutral initial application page                    |
 | `src/pages/patterns/`                 | Optional removable UI/reference page                |
+| `docs/style-guide.md`                 | Visual, responsive, interaction, and UI code rules  |
 | `docs/visual-reference/`              | Approved initial visual snapshot and evidence       |
 | `scripts/verify-artifacts.mjs`        | Federation, embedded CSS, and standalone layer gate |
 
