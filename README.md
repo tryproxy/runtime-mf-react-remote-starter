@@ -5,9 +5,9 @@ Standalone Vite + React application and Runtime MF remote baseline for
 
 > The repository has passed its neutral-application cut. Federation identity,
 > CSS ownership, per-mount state, auth policy, telemetry, portals, routes, copy,
-> and retained UI dependencies are product-neutral. Hosting guidance, template
-> maintenance/CI, and publishing guidance still remain before publishing it as
-> the finished GitHub template.
+> hosting requirements, and retained UI dependencies are product-neutral.
+> Template maintenance/CI and publishing guidance still remain before publishing
+> it as the finished GitHub template.
 
 ## Template lineage
 
@@ -204,8 +204,8 @@ starter repository.
   with normal and reduced motion.
 
 The repository is now an embedded-CSS-safe, mount-isolated, neutral application
-baseline. It is not yet the finished template: hosting, CI, rename,
-compatibility, and publishing/maintenance documentation remain.
+baseline with generic hosting rules. It is not yet the finished template: CI,
+rename, compatibility, and publishing/maintenance documentation remain.
 
 ### Closed WP6.1 quality gates
 
@@ -226,24 +226,25 @@ Fix and verification expectations are defined in the
 
 ## Current surfaces
 
-| Surface                               | Role                                                |
-| ------------------------------------- | --------------------------------------------------- |
-| `./mount`                             | Framework-neutral Runtime MF lifecycle entry        |
-| `nav.json`                            | Shell-consumed child navigation artifact            |
-| `src/app/main.tsx`                    | Standalone entry                                    |
-| `src/app/entry/mount.tsx`             | Embedded entry using the React adapter              |
-| `src/shared/lib/host-auth.ts`         | Bearer/cookie request and host sign-out helpers     |
-| `src/shared/ui/remote-portal/`        | Mount-owned overlay/portal destination              |
-| `src/shared/ui/remote-toast/`         | Mount-owned Sonner routing and cleanup              |
-| `src/app/styles/index.css`            | Embedded-safe CSS entry                             |
-| `src/app/styles/standalone.css`       | Standalone-only document ownership                  |
-| `vite-plugin-rmf-remote-css-layer.ts` | Embedded-only cascade-layer transform               |
-| `src/app/model/nav-manifest.ts`       | Current route/navigation source                     |
-| `src/pages/overview/`                 | Neutral initial application page                    |
-| `src/pages/patterns/`                 | Optional removable UI/reference page                |
-| `docs/style-guide.md`                 | Visual, responsive, interaction, and UI code rules  |
-| `docs/visual-reference/`              | Approved initial visual snapshot and evidence       |
-| `scripts/verify-artifacts.mjs`        | Federation, embedded CSS, and standalone layer gate |
+| Surface                               | Role                                                 |
+| ------------------------------------- | ---------------------------------------------------- |
+| `./mount`                             | Framework-neutral Runtime MF lifecycle entry         |
+| `nav.json`                            | Shell-consumed child navigation artifact             |
+| `src/app/main.tsx`                    | Standalone entry                                     |
+| `src/app/entry/mount.tsx`             | Embedded entry using the React adapter               |
+| `src/shared/lib/host-auth.ts`         | Bearer/cookie request and host sign-out helpers      |
+| `src/shared/ui/remote-portal/`        | Mount-owned overlay/portal destination               |
+| `src/shared/ui/remote-toast/`         | Mount-owned Sonner routing and cleanup               |
+| `src/app/styles/index.css`            | Embedded-safe CSS entry                              |
+| `src/app/styles/standalone.css`       | Standalone-only document ownership                   |
+| `vite-plugin-rmf-remote-css-layer.ts` | Embedded-only cascade-layer transform                |
+| `src/app/model/nav-manifest.ts`       | Current route/navigation source                      |
+| `src/pages/overview/`                 | Neutral initial application page                     |
+| `src/pages/patterns/`                 | Optional removable UI/reference page                 |
+| `docs/style-guide.md`                 | Visual, responsive, interaction, and UI code rules   |
+| `docs/visual-reference/`              | Approved initial visual snapshot and evidence        |
+| `scripts/verify-artifacts.mjs`        | Federation, embedded CSS, and standalone layer gate  |
+| `docs/hosting.md`                     | Independent deploy: files, SPA fallback, CORS, cache |
 
 Once a product has its own UI patterns, remove the optional reference surface:
 
@@ -288,3 +289,16 @@ local registration points `VITE_STARTER_REMOTE_MANIFEST_URL` to
 The remote owns React and ReactDOM (`shared: {}`). Shell chrome, top-level
 history, credentials, theme, locale, and the supplied basename remain shell
 owned through `HostBridge` and the lifecycle contract.
+
+## Hosting
+
+Publish `dist/` as its own origin. The shell loads `mf-manifest.json` from
+that origin; it does not build this repository.
+
+Requirements (SPA fallback, CORS, cache, independence from the shell):
+[`docs/hosting.md`](./docs/hosting.md).
+
+There is no default `vercel.json` (Vercel would apply it automatically). Copy
+[`vercel.json.example`](./vercel.json.example) if you deploy on Vercel. Optional
+nginx lives in that doc. Both examples use `https://shell.example.com` and
+`https://starter-remote.example.com` only.

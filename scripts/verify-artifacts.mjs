@@ -46,6 +46,10 @@ if (!Array.isArray(manifest.shared) || manifest.shared.length !== 0) {
   fail('the starter must not publish shared dependencies');
 }
 
+if (manifest.metaData?.ssrRemoteEntry) {
+  fail('mf-manifest.json must not advertise ssrRemoteEntry');
+}
+
 const mountExpose = manifest.exposes?.find(
   (expose) => expose.path === './mount'
 );
