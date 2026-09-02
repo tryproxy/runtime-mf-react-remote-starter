@@ -29,7 +29,7 @@ export function ModuleNav({
   const locale: AppLocale = isAppLocale(i18n.language) ? i18n.language : 'en';
 
   return (
-    <header className="border-border bg-card space-y-3 rounded-xl border p-3 shadow-sm">
+    <header className="border-border bg-card flex flex-col gap-3 rounded-xl border p-3 shadow-sm">
       <div className="flex min-w-0 flex-wrap items-center justify-between gap-3">
         <p className="font-heading font-semibold">{t('nav.moduleTitle')}</p>
         <div className="flex items-center gap-2">

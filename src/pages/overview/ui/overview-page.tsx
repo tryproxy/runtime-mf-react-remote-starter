@@ -15,8 +15,8 @@ export function OverviewPage() {
   const { t } = useTranslation();
 
   return (
-    <section className="@container/page space-y-6">
-      <header className="space-y-2">
+    <section className="@container/page flex flex-col gap-6">
+      <header className="flex flex-col gap-2">
         <p className="text-muted-foreground text-sm font-medium">
           {t('overview.eyebrow')}
         </p>

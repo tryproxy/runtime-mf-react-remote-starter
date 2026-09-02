@@ -2,6 +2,9 @@
  * Embedded-safe CSS entry. Tailwind utilities are generated without the
  * document-wide Preflight import. The emitted graph is demoted into the
  * shell-owned `rmf-remote` cascade layer by the Vite plugin.
+ *
+ * Use `gap-*`, not `space-y-*`. Sibling `margin` from `space-y-*` loses to
+ * the shell Preflight reset once this graph sits in `rmf-remote`.
  */
 @import 'tailwindcss/utilities.css' layer(utilities);
 @import 'tw-animate-css';

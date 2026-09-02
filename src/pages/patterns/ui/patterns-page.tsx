@@ -70,8 +70,8 @@ export function PatternsPage() {
   };
 
   return (
-    <section className="@container/page space-y-6">
-      <header className="space-y-2">
+    <section className="@container/page flex flex-col gap-6">
+      <header className="flex flex-col gap-2">
         <p className="text-muted-foreground text-sm font-medium">
           {t('patterns.eyebrow')}
         </p>
@@ -96,8 +96,8 @@ export function PatternsPage() {
             <CardDescription>{t('patterns.form.description')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <form className="space-y-4" onSubmit={submitExample}>
-              <div className="space-y-2">
+            <form className="flex flex-col gap-4" onSubmit={submitExample}>
+              <div className="flex flex-col gap-2">
                 <Label htmlFor={exampleNameId}>{t('patterns.form.name')}</Label>
                 <Input
                   required
@@ -108,7 +108,7 @@ export function PatternsPage() {
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <Label>{t('patterns.form.state')}</Label>
                 <Select
                   value={exampleState}
