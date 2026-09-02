@@ -6,7 +6,7 @@ the immutable record; `main` can move.
 | Component                       | This baseline                                                          |
 | ------------------------------- | ---------------------------------------------------------------------- |
 | Starter                         | `runtime-mf-react-remote-starter@0.0.0` (untagged until first release) |
-| `@platform/runtime-mf-contract` | `github:tryproxy/runtime-mf-contract#v0.5.3`                           |
+| `@platform/runtime-mf-contract` | `github:tryproxy/runtime-mf-contract#v0.5.4`                           |
 | `@platform/runtime-mf-adapters` | `github:tryproxy/runtime-mf-adapters#v0.1.3`                           |
 | `@module-federation/vite`       | `^1.20.5`                                                              |
 | React / ReactDOM                | `^19.1.1`                                                              |
