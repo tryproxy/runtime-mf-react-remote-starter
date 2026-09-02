@@ -16,14 +16,15 @@ The copy does not receive later starter changes automatically.
 
 ## Start here
 
-| Goal                                                                           | Read                                                  |
-| ------------------------------------------------------------------------------ | ----------------------------------------------------- |
-| Run and rename the starter                                                     | This README                                           |
-| Understand `./mount`, `HostBridge`, auth, navigation, and the platform handoff | [Runtime MF integration](./docs/integration.md)       |
-| Build responsive and accessible product UI                                     | [Style guide](./docs/style-guide.md)                  |
-| Publish the remote artifact                                                    | [Hosting](./docs/hosting.md)                          |
-| Check supported dependency versions                                            | [Compatibility](./docs/compatibility.md)              |
-| Inspect the neutral visual baseline                                            | [Visual reference](./docs/visual-reference/README.md) |
+| Goal                                                                           | Read                                                                           |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Run and rename the starter                                                     | This README                                                                    |
+| Give a human or AI the complete implementation context                         | [In-depth implementation reference](./docs/remote-implementation-reference.md) |
+| Understand `./mount`, `HostBridge`, auth, navigation, and the platform handoff | [Runtime MF integration](./docs/integration.md)                                |
+| Build responsive and accessible product UI                                     | [Style guide](./docs/style-guide.md)                                           |
+| Publish the remote artifact                                                    | [Hosting](./docs/hosting.md)                                                   |
+| Check supported dependency versions                                            | [Compatibility](./docs/compatibility.md)                                       |
+| Inspect the neutral visual baseline                                            | [Visual reference](./docs/visual-reference/README.md)                          |
 
 The complete documentation map is also available in
 [`docs/README.md`](./docs/README.md).
