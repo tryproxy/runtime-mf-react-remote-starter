@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { RMF_DESIGN_TOKEN_NAMES } from '@platform/runtime-mf-contract/design-tokens';
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -118,6 +119,16 @@ for (const [label, pattern] of forbiddenEmbeddedSelectors) {
 
 if (!mountCss.includes('[data-rmf-root]')) {
   fail('./mount CSS does not contain the remote root scope');
+}
+
+for (const tokenName of RMF_DESIGN_TOKEN_NAMES) {
+  if (!mountCss.includes(`var(${tokenName}`)) {
+    fail(`./mount CSS does not consume ${tokenName}`);
+  }
+}
+
+if (mountCss.includes('--rmf-color-subtle')) {
+  fail('./mount CSS consumes deprecated --rmf-color-subtle');
 }
 
 const portalSemanticReset =

@@ -230,6 +230,17 @@ The host supplies semantic `--rmf-*` inputs and the theme mode. The remote maps
 them to its component semantics below `[data-rmf-root]` and
 `[data-rmf-portal-root]`.
 
+The canonical names come from `@platform/runtime-mf-contract/design-tokens`.
+Tailwind v4 projects can import the packaged adapter:
+
+```css
+@import '@platform/runtime-mf-contract/design-tokens/tailwind-v4.css';
+```
+
+The adapter exposes utilities; it does not set token values. See the
+[style guide](./style-guide.md#design-tokens-v1) for the complete token table
+and the starter mapping.
+
 Embedded code must not:
 
 - style `html`, `body`, or the standalone `#root`;

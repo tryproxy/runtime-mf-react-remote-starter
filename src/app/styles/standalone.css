@@ -57,7 +57,7 @@
 
   html {
     background: var(--background);
-    font-family: 'Geist Variable', sans-serif;
+    font-family: var(--rmf-font-sans, 'Geist Variable', sans-serif);
   }
 
   body {

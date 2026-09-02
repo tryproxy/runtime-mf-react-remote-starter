@@ -9,11 +9,12 @@ screenshots are appearance references only.
 Use these sources in order:
 
 1. this guide for behavior and ownership rules;
-2. `src/app/styles/tokens.css` for semantic token mappings;
-3. `src/app/styles/standalone.css` and `src/app/styles/index.css` for standalone
+2. `@platform/runtime-mf-contract/design-tokens` for shared token names;
+3. `src/app/styles/tokens.css` for Tailwind/shadcn mappings;
+4. `src/app/styles/standalone.css` and `src/app/styles/index.css` for standalone
    and embedded CSS ownership;
-4. `src/shared/ui/shadcn/` for retained primitive implementations;
-5. [`visual-reference/`](./visual-reference/README.md) for neutral appearance.
+5. `src/shared/ui/shadcn/` for retained primitive implementations;
+6. [`visual-reference/`](./visual-reference/README.md) for neutral appearance.
 
 Product teams may replace the starter's visual language, but must preserve the
 integration, containment, responsiveness, and accessibility rules below.
@@ -30,6 +31,48 @@ integration, containment, responsiveness, and accessibility rules below.
   standalone mode.
 - Keep focus visible. Hover must never be the only indication of focus.
 - Product branding and business-state semantics belong to the product remote.
+
+### Design Tokens v1
+
+The host publishes these CSS custom properties. Embedded styles read them; they
+must never redefine them. Standalone styles keep local fallback values.
+
+| Token                      | Purpose                            |
+| -------------------------- | ---------------------------------- |
+| `--rmf-color-page`         | Page/canvas background             |
+| `--rmf-color-fg`           | Default page text                  |
+| `--rmf-color-surface`      | Card, panel, popover background    |
+| `--rmf-color-surface-fg`   | Text on a surface                  |
+| `--rmf-color-muted`        | Muted/secondary background         |
+| `--rmf-color-muted-fg`     | Secondary text and labels          |
+| `--rmf-color-primary`      | Primary action                     |
+| `--rmf-color-primary-fg`   | Text/icon on primary               |
+| `--rmf-color-secondary`    | Secondary action                   |
+| `--rmf-color-secondary-fg` | Text/icon on secondary             |
+| `--rmf-color-accent`       | Ghost/interactive hover background |
+| `--rmf-color-accent-fg`    | Text/icon on accent                |
+| `--rmf-color-destructive`  | Error and destructive action       |
+| `--rmf-color-border`       | Dividers and structural borders    |
+| `--rmf-color-input`        | Form-control chrome                |
+| `--rmf-color-ring`         | Keyboard focus ring                |
+| `--rmf-radius-md`          | Base control radius                |
+| `--rmf-shadow-sm`          | Light elevation                    |
+| `--rmf-font-sans`          | Shared sans-serif font stack       |
+
+Import the Tailwind v4 aliases once through `src/app/styles/tokens.css`:
+
+```css
+@import '@platform/runtime-mf-contract/design-tokens/tailwind-v4.css';
+```
+
+Application code normally uses shadcn semantic utilities (`bg-primary`,
+`border-input`, `ring-ring`). The starter maps those roles to `--rmf-*` below
+`[data-rmf-root]`. The imported adapter additionally exposes explicit utilities
+such as `bg-rmf-page`, `text-rmf-muted-fg`, and `rounded-rmf-md` when needed.
+
+Do not add shell sidebar/chart roles, spacing, or breakpoints to this interface.
+Derive smaller/larger radii from the single base radius. Add product status and
+brand colors locally instead of extending the platform token namespace.
 
 ## Responsive layout
 
