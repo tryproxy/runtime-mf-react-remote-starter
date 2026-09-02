@@ -8,7 +8,10 @@ that runs in two modes:
    entry and supplies theme, locale, session, navigation, and telemetry through
    `HostBridge`.
 
-Copy the repository into a new product repository before adding product code.
+Copy git tag **v0.1.0** (not `main`) into a new product repository before
+adding product code:
+https://github.com/tryproxy/runtime-mf-react-remote-starter/tree/v0.1.0
+
 The copy does not receive later starter changes automatically.
 
 ## Start here
@@ -250,8 +253,8 @@ A product repository is a one-time copy:
 - later starter fixes are adopted deliberately by copying or cherry-picking;
 - a product is not required to follow every starter commit.
 
-Use an immutable starter tag or exact commit in handoff records so both teams
-can identify the baseline that was copied.
+Use immutable starter tag `v0.1.0` (or a later published tag) in handoff
+records so both teams can identify the baseline that was copied.
 
 ## Source map
 

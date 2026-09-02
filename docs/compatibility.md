@@ -1,19 +1,19 @@
 # Compatibility
 
-Baseline for this repository at `package.json` version `0.0.0`. A git tag is
-the immutable record; `main` can move.
+Baseline for this repository at git tag `v0.1.0` (`package.json` version
+`0.1.0`). `main` can move after that tag.
 
-| Component                       | This baseline                                                          |
-| ------------------------------- | ---------------------------------------------------------------------- |
-| Starter                         | `runtime-mf-react-remote-starter@0.0.0` (untagged until first release) |
-| `@platform/runtime-mf-contract` | `github:tryproxy/runtime-mf-contract#v0.5.4`                           |
-| `@platform/runtime-mf-adapters` | `github:tryproxy/runtime-mf-adapters#v0.1.3`                           |
-| `@module-federation/vite`       | `^1.20.5`                                                              |
-| React / ReactDOM                | `^19.1.1`                                                              |
-| Vite                            | `^7.1.2`                                                               |
-| Tailwind CSS                    | `^4.1.12`                                                              |
-| Node.js                         | `>=22.13.0` (`.node-version` `22.13.0`)                                |
-| pnpm                            | `11.25.0`                                                              |
+| Component                       | This baseline                                      |
+| ------------------------------- | -------------------------------------------------- |
+| Starter                         | `runtime-mf-react-remote-starter@0.1.0` (`v0.1.0`) |
+| `@platform/runtime-mf-contract` | `github:tryproxy/runtime-mf-contract#v0.5.4`       |
+| `@platform/runtime-mf-adapters` | `github:tryproxy/runtime-mf-adapters#v0.1.3`       |
+| `@module-federation/vite`       | `^1.20.5`                                          |
+| React / ReactDOM                | `^19.1.1`                                          |
+| Vite                            | `^7.1.2`                                           |
+| Tailwind CSS                    | `^4.1.12`                                          |
+| Node.js                         | `>=22.13.0` (`.node-version` `22.13.0`)            |
+| pnpm                            | `11.25.0`                                          |
 
 ## Pin policy
 
