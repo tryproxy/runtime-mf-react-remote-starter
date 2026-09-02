@@ -36,7 +36,7 @@ function AppRoutes({
 }) {
   return (
     <TooltipProvider>
-      <section className="min-w-0 space-y-6 overflow-x-auto">
+      <section className="min-w-0 space-y-6 overflow-x-auto p-px">
         {frame}
 
         <Routes>
